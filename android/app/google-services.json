@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081656091258",
+    "project_id": "nouga-b9207",
+    "storage_bucket": "nouga-b9207.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081656091258:android:49a625ea2c7dc0241a91c3",
+        "android_client_info": {
+          "package_name": "com.example.nouga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081656091258-r9nnpmf32lbcjcpe4ut621jghj1udqb4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDciXNV8p-2n0Pv04ZH_SFEJd8ECdWoVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081656091258-r9nnpmf32lbcjcpe4ut621jghj1udqb4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

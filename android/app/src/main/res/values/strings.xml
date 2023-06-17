@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ressources>
+    <string name="app_name">NougApp</string>
+    <string name="facebook_app_id">288334213632428</string>
+    <string name="fb_login_protocol_scheme">fb288334213632428</string>
+    <string name="facebook_client_token">f6c86787371fcf129673e0e480fcc662</string>
+</ressources>
