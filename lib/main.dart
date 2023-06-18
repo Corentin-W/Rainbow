@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Rainbow',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -41,15 +42,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Boarding()));
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Login()));
-      }
-    });
-    return const Login();
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.hasData) {
+            print('infosuser');
+            print(snapshot.data);
+            return const Boarding();
+          } else {
+            return const Login();
+          }
+        });
   }
 }
