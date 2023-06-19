@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
               width: 250, height: 250, withName: true),
 
           // Inputs de login
-          loginFacebook(),
+          // loginFacebook(),
           loginGoogle()
         ],
       ),

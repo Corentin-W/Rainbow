@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nouga/services/auth_service.dart';
 
 class Boarding extends StatefulWidget {
   const Boarding({super.key});
@@ -10,10 +11,14 @@ class Boarding extends StatefulWidget {
 class _BoardingState extends State<Boarding> {
   @override
   Widget build(BuildContext context) {
-    
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('LETWGOWW'),
+        child: ElevatedButton(
+            onPressed: () {
+              AuthService authService = AuthService();
+              authService.signOut();
+            },
+            child: Text('bye')),
       ),
     );
   }
