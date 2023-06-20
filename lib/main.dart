@@ -46,8 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.hasData) {
-            print('infosuser');
-            print(snapshot.data);
             return const Boarding();
           } else {
             return const Login();
