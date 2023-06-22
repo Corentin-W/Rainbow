@@ -24,4 +24,11 @@ class Globals {
             width: width.toDouble(), height: height.toDouble());
     }
   }
+
+  textWithRainbowPolice({required textData, required size, required weight, required TextAlign align}) {
+    return Text(textData, textAlign: align,
+        style: GoogleFonts.comfortaa(
+            textStyle: TextStyle(
+                fontSize: size.toDouble(), fontWeight: weight, )));
+  }
 }
