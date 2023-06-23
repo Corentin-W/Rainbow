@@ -26,8 +26,6 @@ class _BoardingState extends State<Boarding> {
     double height = MediaQuery.of(context).size.height;
     UserService userService = UserService();
     String? googleApikey = dotenv.env['APIKEY_GOOGLEPLACES'];
-    print('envtet');
-    print(googleApikey);
     GoogleMapController? mapController; //contrller for Google map
     CameraPosition? cameraPosition;
     // LatLng startLocation = LatLng(27.6602292, 85.308027);
