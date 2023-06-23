@@ -4,7 +4,6 @@ import '../services/auth_service.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -52,8 +51,8 @@ class _LoginState extends State<Login> {
       onPressed: () async {
         signInWithFacebook();
       },
-      icon: Icon(Icons.login),
-      label: Text('Se connecter avec Facebook'),
+      icon: const Icon(Icons.login),
+      label: const Text('Se connecter avec Facebook'),
     );
   }
 

@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:nouga/controllers/home.dart';
 import 'package:nouga/globals/globals.dart';
-import 'package:nouga/services/auth_service.dart';
 import 'package:nouga/services/user_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
-import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,13 +19,15 @@ class Boarding extends StatefulWidget {
 class _BoardingState extends State<Boarding> {
   String location = "Rechercher votre ville";
   String pseudo = "Choisir un pseudo";
-
+  final pseudoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     UserService userService = UserService();
-    String googleApikey = "";
+    String? googleApikey = dotenv.env['APIKEY_GOOGLEPLACES'];
+    print('envtet');
+    print(googleApikey);
     GoogleMapController? mapController; //contrller for Google map
     CameraPosition? cameraPosition;
     // LatLng startLocation = LatLng(27.6602292, 85.308027);
@@ -44,7 +44,7 @@ class _BoardingState extends State<Boarding> {
                     screenWidth: width,
                     screenHeight: height);
               } else {
-                return Home();
+                return const Home();
               }
             } else {
               return const Center(
@@ -63,11 +63,11 @@ class _BoardingState extends State<Boarding> {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Padding(
-        padding: EdgeInsets.only(top: 35, left: 10, right: 10),
+        padding: const EdgeInsets.only(top: 35, left: 10, right: 10),
         child: Center(
           child: Column(children: [
             globals.getRainbowLogo(height: 125, width: 125, withName: true),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             globals.textWithRainbowPolice(
@@ -85,10 +85,10 @@ class _BoardingState extends State<Boarding> {
 
   inputs() {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: Column(
         children: [
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           pseudoInput(),
           googlePlacesInput(),
           validateButton()
@@ -101,19 +101,20 @@ class _BoardingState extends State<Boarding> {
     return Positioned(
       top: 10,
       child: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: Card(
           child: Container(
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             width: MediaQuery.of(context).size.width - 40,
             child: TextField(
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(left: 15, top: 10),
+                contentPadding: const EdgeInsets.only(left: 15, top: 10),
                 hintText: pseudo,
-                suffixIcon: Icon(Icons.account_circle),
+                suffixIcon: const Icon(Icons.account_circle),
                 border: InputBorder.none,
               ),
-              style: TextStyle(fontSize: 18),
+              controller: pseudoController,
+              style: const TextStyle(fontSize: 18),
             ),
           ),
         ),
@@ -122,10 +123,7 @@ class _BoardingState extends State<Boarding> {
   }
 
   googlePlacesInput() {
-    String googleApikey = "AIzaSyAEeRnZZsAmcU4pgQQSDDKImPzmtW-xwKQ";
-    GoogleMapController? mapController; //contrller for Google map
-    CameraPosition? cameraPosition;
-    // LatLng startLocation = LatLng(27.6602292, 85.308027);
+    String? googleApikey = dotenv.env['APIKEY_GOOGLEPLACES'];
 
     return Positioned(
         //search input bar
@@ -148,22 +146,21 @@ class _BoardingState extends State<Boarding> {
                 setState(() {
                   location = "";
                   location = place.description.toString();
-                  print(location);
                 });
               }
             },
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Card(
                 child: Container(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     width: MediaQuery.of(context).size.width - 40,
                     child: ListTile(
                       title: Text(
                         location,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
-                      trailing: Icon(Icons.search),
+                      trailing: const Icon(Icons.search),
                       dense: true,
                     )),
               ),
@@ -176,15 +173,16 @@ class _BoardingState extends State<Boarding> {
         child: InkWell(
             onTap: () {
               print(location);
+              print(pseudoController.text);
             },
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Card(
-                color: Color.fromARGB(255, 48, 134, 205),
+                color: const Color.fromARGB(255, 48, 134, 205),
                 child: Container(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     width: MediaQuery.of(context).size.width - 40,
-                    child: ListTile(
+                    child: const ListTile(
                       title: Center(
                         child: Text(
                           'Valider',
