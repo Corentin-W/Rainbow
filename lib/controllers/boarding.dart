@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nouga/controllers/home.dart';
 import 'package:nouga/globals/globals.dart';
@@ -27,7 +28,7 @@ class _BoardingState extends State<Boarding> {
     UserService userService = UserService();
     String? googleApikey = dotenv.env['APIKEY_GOOGLEPLACES'];
     GoogleMapController? mapController; //contrller for Google map
-    CameraPosition? cameraPosition;
+    // CameraPosition? cameraPosition;
     // LatLng startLocation = LatLng(27.6602292, 85.308027);
 
     return Scaffold(
@@ -74,14 +75,14 @@ class _BoardingState extends State<Boarding> {
                 weight: FontWeight.w400,
                 textData:
                     "Bienvenue sur Rainbow, pour commencer nous allons vous demander un peu plus d'informations"),
-            inputs()
+            inputs(email: email)
           ]),
         ),
       ),
     );
   }
 
-  inputs() {
+  inputs({required email}) {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Column(
@@ -89,7 +90,7 @@ class _BoardingState extends State<Boarding> {
           const SizedBox(height: 30),
           pseudoInput(),
           googlePlacesInput(),
-          validateButton()
+          validateButton(email: email)
         ],
       ),
     );
@@ -165,7 +166,7 @@ class _BoardingState extends State<Boarding> {
             )));
   }
 
-  validateButton() {
+  validateButton({required email}) {
     return Positioned(
         top: 20,
         child: InkWell(
@@ -178,7 +179,21 @@ class _BoardingState extends State<Boarding> {
               if (location == "Rechercher votre ville") {
                 return showAlert(context, 'ville.');
               }
-              
+
+              final docData = {
+                "pseudo": pseudoController.text,
+                "city": location,
+                "etat": 1
+              };
+              FirebaseFirestore db = FirebaseFirestore.instance;
+              final etat = db.collection("users").doc(email);
+              etat.update({"etat": 1}).then((value) {
+                db.collection("users").doc(email).set(docData);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                );
+              }, onError: (e) => print("Error updating document $e"));
             },
             child: Padding(
               padding: const EdgeInsets.all(15),
