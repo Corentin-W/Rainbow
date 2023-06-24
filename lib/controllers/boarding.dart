@@ -172,6 +172,13 @@ class _BoardingState extends State<Boarding> {
             onTap: () {
               print(location);
               print(pseudoController.text);
+              if (pseudoController.text == "") {
+                return showAlert(context, 'pseudo.');
+              }
+              if (location == "Rechercher votre ville") {
+                return showAlert(context, 'ville.');
+              }
+              
             },
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -191,5 +198,26 @@ class _BoardingState extends State<Boarding> {
                     )),
               ),
             )));
+  }
+
+  void showAlert(BuildContext context, nomDuChamp) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Oups..."),
+      content: Text("Veuillez remplir le champ $nomDuChamp"),
+      actions: [
+        TextButton(
+          child: Text("OK"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
