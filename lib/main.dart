@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:nouga/services/auth_service.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'controllers/boarding.dart';
 import 'controllers/login.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -18,7 +21,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Rainbow',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -41,15 +45,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Boarding()));
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Login()));
-      }
-    });
-    return const Login();
+    if (FirebaseAuth.instance.currentUser == null) {
+      AuthService instanceSignOut = AuthService();
+      instanceSignOut.signOut();
+    }
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.hasData) {
+            return const Boarding();
+          } else {
+            return const Login();
+          }
+        });
   }
 }

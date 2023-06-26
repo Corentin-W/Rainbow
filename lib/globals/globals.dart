@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Globals {
   rainbowName({required fontSize}) {
@@ -24,4 +26,28 @@ class Globals {
             width: width.toDouble(), height: height.toDouble());
     }
   }
+
+  textWithRainbowPolice({required textData, required size, required weight, required TextAlign align}) {
+    return Text(textData, textAlign: align,
+        style: GoogleFonts.comfortaa(
+            textStyle: TextStyle(
+                fontSize: size.toDouble(), fontWeight: weight, )));
+  }
+
+  signOut() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+    try {
+      // Déconnectez-vous de Firebase
+      await _auth.signOut();
+
+      // Déconnectez-vous de Google Sign-In
+      await _googleSignIn.signOut();
+    } catch (e) {
+      print('Erreur lors de la déconnexion : $e');
+    }
+  }
+
+  
 }
