@@ -48,4 +48,6 @@ class Globals {
       print('Erreur lors de la déconnexion : $e');
     }
   }
+
+  
 }
