@@ -24,7 +24,7 @@ class DrawerGlobal extends StatelessWidget {
             ),
             title: const Text('Accueil'),
             onTap: () {
-              Navigator.pop(
+              Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Home()));
             },
           ),
@@ -52,7 +52,7 @@ class DrawerGlobal extends StatelessWidget {
             ),
             title: const Text('Informations'),
             onTap: () {
-              Navigator.pop(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const Informations()));

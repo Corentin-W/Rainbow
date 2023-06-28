@@ -72,11 +72,11 @@ class _HomeState extends State<Home> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const NewCase()));
             },
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ),
-        SizedBox(height: 5),
-        Text('Ajouter un case')
+        const SizedBox(height: 5),
+        const Text('Ajouter un case')
       ],
     );
   }
@@ -90,11 +90,11 @@ class _HomeState extends State<Home> {
           child: FloatingActionButton(
             heroTag: 'searchButton',
             onPressed: () {},
-            child: Icon(Icons.search),
+            child: const Icon(Icons.search),
           ),
         ),
-        SizedBox(height: 5),
-        Text('Chercher un case')
+        const SizedBox(height: 5),
+        const Text('Chercher un case')
       ],
     );
   }
@@ -108,11 +108,11 @@ class _HomeState extends State<Home> {
           child: FloatingActionButton(
             heroTag: 'favoriteButton',
             onPressed: () {},
-            child: Icon(Icons.favorite),
+            child: const Icon(Icons.favorite),
           ),
         ),
-        SizedBox(height: 5),
-        Text('Chercher un case')
+        const SizedBox(height: 5),
+        const Text('Chercher un case')
       ],
     );
   }
@@ -126,11 +126,11 @@ class _HomeState extends State<Home> {
           child: FloatingActionButton(
             heroTag: 'settingsButton',
             onPressed: () {},
-            child: Icon(Icons.settings),
+            child: const Icon(Icons.settings),
           ),
         ),
-        SizedBox(height: 5),
-        Text('Chercher un case')
+        const SizedBox(height: 5),
+        const Text('Chercher un case')
       ],
     );
   }
