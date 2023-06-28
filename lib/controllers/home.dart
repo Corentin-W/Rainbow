@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nouga/controllers/new_case.dart';
+import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
 import '../globals/drawer.dart';
 import 'informations.dart';
@@ -70,7 +71,7 @@ class _HomeState extends State<Home> {
             heroTag: 'addButton',
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewCase()));
+                  MaterialPageRoute(builder: (context) => const Warning()));
             },
             child: const Icon(Icons.add),
           ),

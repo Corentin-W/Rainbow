@@ -19,6 +19,7 @@ class _NewCaseState extends State<NewCase> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
