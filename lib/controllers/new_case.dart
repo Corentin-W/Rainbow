@@ -126,16 +126,12 @@ class _NewCaseState extends State<NewCase> {
         top: 20,
         child: InkWell(
             onTap: () {
-              print('Prenom : ');
               print(prenomPersonneDisparue.text);
 
-              print('Nom : ');
               print(nomPersonneDisparue.text);
 
-              print('age : ');
               print(agePersonneDisparue.text);
 
-              print('description : ');
               print(descriptionPersonneDisparue.text);
             },
             child: Padding(
