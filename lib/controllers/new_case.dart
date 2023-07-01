@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
 
@@ -19,7 +19,7 @@ class _NewCaseState extends State<NewCase> {
   Globals globals = Globals();
   String dropdownValueTaille = "Taille";
   String dropdownvalueCheveux = 'Couleur des cheveux';
-
+  late DateTime _selectedDateDisparition;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +68,7 @@ class _NewCaseState extends State<NewCase> {
                   const SizedBox(height: 30),
                   descriptionTaille(),
                   SizedBox(height: 30),
-                  titleSecond(),
+                  descriptionDateDisparition(),
                   const SizedBox(
                     height: 30,
                   ),
@@ -80,6 +80,18 @@ class _NewCaseState extends State<NewCase> {
       ),
     );
   }
+
+  //   Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: DateTime.now(),
+  //       firstDate: DateTime(2015, 8),
+  //       lastDate: DateTime(2101));
+  //   if (picked != null && picked != _selectedDate)
+  //     setState(() {
+  //       _selectedDate = picked;
+  //     });
+  // }
 
   validateButton() {
     return Positioned(
@@ -101,6 +113,20 @@ class _NewCaseState extends State<NewCase> {
               } else if (dropdownvalueCheveux == "Couleur des cheveux") {
                 showAlert(context, 'Taille');
               }
+
+              // final docData = {
+              //   "pseudo": pseudoController.text,
+              //   "city": location,
+              //   "etat": 1
+              // };
+              // FirebaseFirestore db = FirebaseFirestore.instance;
+              // final etat = db.collection("users").doc(email);
+              // etat.update({"etat": 1}).then((value) {
+              //   db.collection("users").doc(email).set(docData);
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (context) => const Home()),
+              //   );
             },
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -364,15 +390,25 @@ class _NewCaseState extends State<NewCase> {
     );
   }
 
-  titleFirst() {
-    return globals.textWithRainbowPolice(
-        textData: "Informations sur la personne recherchée",
-        size: 20,
-        align: TextAlign.center,
-        weight: FontWeight.w600);
+  descriptionDateDisparition() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context, //context of current state
+        initialDate: DateTime.now(),
+        firstDate: DateTime(
+            2000), //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2101));
+
+    if (pickedDate != null) {
+      print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      print(
+          formattedDate); //formatted date output using intl package =>  2021-03-16
+    } else {
+      print("Date is not selected");
+    }
   }
 
-  titleSecond() {
+  titleFirst() {
     return globals.textWithRainbowPolice(
         textData: "Informations sur la personne recherchée",
         size: 20,
