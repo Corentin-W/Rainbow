@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:intl/intl.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
+import 'package:flutter_localization/flutter_localization.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class NewCase extends StatefulWidget {
   const NewCase({super.key});
@@ -15,11 +20,12 @@ class _NewCaseState extends State<NewCase> {
   final nomPersonneDisparue = TextEditingController();
   final agePersonneDisparue = TextEditingController();
   final descriptionPersonneDisparue = TextEditingController();
-  String cheveux = "";
   Globals globals = Globals();
   String dropdownValueTaille = "Taille";
   String dropdownvalueCheveux = 'Couleur des cheveux';
-  late DateTime _selectedDateDisparition;
+  DateTime date = DateTime.now();
+  String localisation = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +73,10 @@ class _NewCaseState extends State<NewCase> {
                   descriptionCheveux(),
                   const SizedBox(height: 30),
                   descriptionTaille(),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   descriptionDateDisparition(),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30),
+                  derniereLocalisation(),
                   validateButton(),
                   const SizedBox(height: 30),
                 ]),
@@ -106,27 +111,27 @@ class _NewCaseState extends State<NewCase> {
                 showAlert(context, 'Age');
               } else if (descriptionPersonneDisparue.text == "") {
                 showAlert(context, 'Description');
-              } else if (cheveux == "" || cheveux == "Couleur des cheveux") {
-                showAlert(context, "Couleur de cheveux");
               } else if (dropdownValueTaille == "Taille") {
                 showAlert(context, 'Taille');
               } else if (dropdownvalueCheveux == "Couleur des cheveux") {
                 showAlert(context, 'Taille');
+              } else if (localisation == "") {
+                showAlert(context, 'Vu(e) la derniere fois q');
               }
 
-              // final docData = {
-              //   "pseudo": pseudoController.text,
-              //   "city": location,
-              //   "etat": 1
-              // };
-              // FirebaseFirestore db = FirebaseFirestore.instance;
-              // final etat = db.collection("users").doc(email);
-              // etat.update({"etat": 1}).then((value) {
-              //   db.collection("users").doc(email).set(docData);
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (context) => const Home()),
-              //   );
+              final docData = {
+                "prenom": prenomPersonneDisparue.text,
+                "nom": nomPersonneDisparue.text,
+                "age": agePersonneDisparue.text,
+                "description_vetements": descriptionPersonneDisparue.text,
+                "cheveux": dropdownvalueCheveux,
+                "date": date,
+                "taille": dropdownValueTaille,
+                "localisation": localisation
+              };
+              FirebaseFirestore db = FirebaseFirestore.instance;
+              final instance = db.collection("cases");
+              instance.add(docData);
             },
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -390,22 +395,61 @@ class _NewCaseState extends State<NewCase> {
     );
   }
 
-  descriptionDateDisparition() async {
-    DateTime? pickedDate = await showDatePicker(
-        context: context, //context of current state
-        initialDate: DateTime.now(),
-        firstDate: DateTime(
-            2000), //DateTime.now() - not to allow to choose before today.
-        lastDate: DateTime(2101));
+  descriptionDateDisparition() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+            onPressed: () async {
+              DateTime? newDate = await showDatePicker(
+                  context: context,
+                  locale: const Locale("fr", "FR"),
+                  initialDate: date,
+                  firstDate: DateTime(1995),
+                  lastDate: DateTime.now());
+              if (newDate != null) {
+                setState(() {
+                  date = newDate;
+                });
+              }
+            },
+            child: const Text('Choisir la date de disparition')),
+        const SizedBox(height: 10),
+        Text('Date choisie : ${date.day}/${date.month}/${date.year}'),
+      ],
+    );
+  }
 
-    if (pickedDate != null) {
-      print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      print(
-          formattedDate); //formatted date output using intl package =>  2021-03-16
-    } else {
-      print("Date is not selected");
-    }
+  derniereLocalisation() {
+    String? googleApikey = dotenv.env['APIKEY_GOOGLEPLACES'];
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        ElevatedButton(
+            onPressed: () async {
+              var place = await PlacesAutocomplete.show(
+                  context: context,
+                  apiKey: googleApikey,
+                  mode: Mode.overlay,
+                  types: [],
+                  strictbounds: false,
+                  components: [Component(Component.country, 'fr')],
+                  //google_map_webservice package
+                  onError: (err) {
+                    print(err);
+                  });
+
+              if (place != null) {
+                setState(() {
+                  localisation = place.description.toString();
+                });
+              }
+            },
+            child: Text("Vu(e) la derniere fois a : ")),
+        Text(localisation)
+      ],
+    );
   }
 
   titleFirst() {

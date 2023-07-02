@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:nouga/services/auth_service.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'controllers/boarding.dart';
 import 'controllers/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,6 +25,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+         GlobalMaterialLocalizations.delegate
+       ],
+       supportedLocales: const [
+          Locale('fr')
+       ],
       debugShowCheckedModeBanner: false,
       title: 'Rainbow',
       theme: ThemeData(
