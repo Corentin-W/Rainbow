@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:intl/intl.dart';
+import 'package:nouga/services/user_service.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:google_maps_webservice/places.dart';
+
+import 'home_case.dart';
 
 class NewCase extends StatefulWidget {
   const NewCase({super.key});
@@ -102,7 +105,7 @@ class _NewCaseState extends State<NewCase> {
     return Positioned(
         top: 20,
         child: InkWell(
-            onTap: () {
+            onTap: () async {
               if (prenomPersonneDisparue.text == "") {
                 showAlert(context, 'Prenom');
               } else if (nomPersonneDisparue.text == "") {
@@ -118,7 +121,8 @@ class _NewCaseState extends State<NewCase> {
               } else if (localisation == "") {
                 showAlert(context, 'Vu(e) la derniere fois q');
               }
-
+              UserService userService = UserService();
+              final userDataEmail = await userService.getCurrentUserEmail();
               final docData = {
                 "prenom": prenomPersonneDisparue.text,
                 "nom": nomPersonneDisparue.text,
@@ -127,11 +131,25 @@ class _NewCaseState extends State<NewCase> {
                 "cheveux": dropdownvalueCheveux,
                 "date": date,
                 "taille": dropdownValueTaille,
-                "localisation": localisation
+                "localisation": localisation,
+                "user_email": userDataEmail
               };
               FirebaseFirestore db = FirebaseFirestore.instance;
               final instance = db.collection("cases");
-              instance.add(docData);
+              DocumentReference docRef = await instance.add(docData);
+              String docID = docRef.id;
+              if (context.mounted) {
+                Navigator.pop(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeCase(id: docID)),
+                );
+              }
+
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (BuildContext context) => HomeCase(id: docID)),
+              // );
             },
             child: Padding(
               padding: const EdgeInsets.all(15),

@@ -17,4 +17,13 @@ class UserService {
       return null;
     }
   }
+
+  Future<String?> getCurrentUserEmail() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.email;
+    } else {
+      return "";
+    }
+  }
 }
