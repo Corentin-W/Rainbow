@@ -138,7 +138,6 @@ class _BoardingState extends State<Boarding> {
                   components: [Component(Component.country, 'fr')],
                   //google_map_webservice package
                   onError: (err) {
-                    print(err);
                   });
 
               if (place != null) {
@@ -171,8 +170,6 @@ class _BoardingState extends State<Boarding> {
         top: 20,
         child: InkWell(
             onTap: () {
-              print(location);
-              print(pseudoController.text);
               if (pseudoController.text == "") {
                 return showAlert(context, 'pseudo.');
               }
@@ -217,11 +214,11 @@ class _BoardingState extends State<Boarding> {
 
   void showAlert(BuildContext context, nomDuChamp) {
     AlertDialog alert = AlertDialog(
-      title: Text("Oups..."),
+      title: const Text("Oups..."),
       content: Text("Veuillez remplir le champ $nomDuChamp"),
       actions: [
         TextButton(
-          child: Text("OK"),
+          child: const Text("OK"),
           onPressed: () {
             Navigator.of(context).pop();
           },

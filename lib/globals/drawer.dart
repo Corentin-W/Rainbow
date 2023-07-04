@@ -25,7 +25,7 @@ class DrawerGlobal extends StatelessWidget {
             title: const Text('Accueil'),
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home()));
+                  context, MaterialPageRoute(builder: (context) => const Home()));
             },
           ),
           ListTile(

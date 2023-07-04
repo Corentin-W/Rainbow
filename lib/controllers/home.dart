@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:nouga/controllers/new_case.dart';
+import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
 import '../globals/drawer.dart';
-import 'informations.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -33,9 +33,45 @@ class _HomeState extends State<Home> {
 
   homePage() {
     return Center(
-      child: Column(
-        children: [actionsButton(), actionsButton2()],
+      child: Expanded(
+        child: Column(
+          children: [
+            actionsButton(),
+            actionsButton2(),
+            const SizedBox(height: 20),
+            lastCases()
+          ],
+        ),
       ),
+    );
+  }
+
+  lastCases() {
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: FirebaseFirestore.instance.collection('cases').snapshots(),
+      builder: (BuildContext context,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
+
+        return Expanded(
+          child: ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: ListTile(
+                  title: Text(snapshot.data!.docs[index]['nom']),
+                  subtitle: Text(snapshot.data!.docs[index]['prenom']),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -90,7 +126,10 @@ class _HomeState extends State<Home> {
           width: 100,
           child: FloatingActionButton(
             heroTag: 'searchButton',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => const Search())));
+            },
             child: const Icon(Icons.search),
           ),
         ),

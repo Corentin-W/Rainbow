@@ -2,11 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
-import 'package:intl/intl.dart';
 import 'package:nouga/services/user_service.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 import 'package:google_maps_webservice/places.dart';
 
 import 'home_case.dart';
@@ -172,7 +170,7 @@ class _NewCaseState extends State<NewCase> {
   }
 
   surName() {
-    return Container(
+    return SizedBox(
       width: 300,
       height: 30,
       child: TextField(
@@ -184,7 +182,7 @@ class _NewCaseState extends State<NewCase> {
   }
 
   name() {
-    return Container(
+    return SizedBox(
       width: 300,
       height: 30,
       child: TextField(
@@ -196,7 +194,7 @@ class _NewCaseState extends State<NewCase> {
   }
 
   age() {
-    return Container(
+    return SizedBox(
       width: 300,
       height: 30,
       child: TextField(
@@ -209,7 +207,7 @@ class _NewCaseState extends State<NewCase> {
   }
 
   descriptionVetements() {
-    return Container(
+    return SizedBox(
       width: 300,
       height: 90,
       child: TextField(
@@ -230,7 +228,7 @@ class _NewCaseState extends State<NewCase> {
       'Roux',
       'Pas de cheveux',
     ];
-    return Container(
+    return SizedBox(
       width: 300,
       height: 50,
       child: DropdownButton(
@@ -260,7 +258,7 @@ class _NewCaseState extends State<NewCase> {
   descriptionTaille() {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Container(
+      child: SizedBox(
         height: 50,
         width: 300,
         child: DropdownButton<String>(
@@ -455,7 +453,6 @@ class _NewCaseState extends State<NewCase> {
                   components: [Component(Component.country, 'fr')],
                   //google_map_webservice package
                   onError: (err) {
-                    print(err);
                   });
 
               if (place != null) {
@@ -464,7 +461,7 @@ class _NewCaseState extends State<NewCase> {
                 });
               }
             },
-            child: Text("Vu(e) la derniere fois a : ")),
+            child: const Text("Vu(e) la derniere fois a : ")),
         Text(localisation)
       ],
     );
@@ -480,11 +477,11 @@ class _NewCaseState extends State<NewCase> {
 
   void showAlert(BuildContext context, nomDuChamp) {
     AlertDialog alert = AlertDialog(
-      title: Text("Oups..."),
+      title: const Text("Oups..."),
       content: Text("Veuillez remplir le champ $nomDuChamp"),
       actions: [
         TextButton(
-          child: Text("OK"),
+          child: const Text("OK"),
           onPressed: () {
             Navigator.of(context).pop();
           },
