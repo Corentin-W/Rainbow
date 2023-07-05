@@ -33,8 +33,11 @@ class _HomeState extends State<Home> {
 
   homePage() {
     return Center(
-      child: Expanded(
+      child: SizedBox(
+        height: 600,
+        width: 300,
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             actionsButton(),
             actionsButton2(),
@@ -47,31 +50,28 @@ class _HomeState extends State<Home> {
   }
 
   lastCases() {
-    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance.collection('cases').snapshots(),
-      builder: (BuildContext context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (!snapshot.hasData) {
-          return const CircularProgressIndicator();
-        }
-
-        return Expanded(
-          child: ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (BuildContext context, int index) {
+    return SizedBox(
+      width: 300,
+      height: 300,
+      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance.collection('cases').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
+    
+          return ListView(
+            scrollDirection: Axis.horizontal,
+            children: snapshot.data!.docs.map((doc) {
               return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
                 child: ListTile(
-                  title: Text(snapshot.data!.docs[index]['nom']),
-                  subtitle: Text(snapshot.data!.docs[index]['prenom']),
+                  title: Text(doc.data()['cheveux']),
                 ),
               );
-            },
-          ),
-        );
-      },
+            }).toList(),
+          );
+        },
+      ),
     );
   }
 
