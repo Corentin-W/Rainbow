@@ -19,56 +19,70 @@ class _HomeState extends State<Home> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text(
-            'Rainbow',
+          title: Column(
+            children: [
+              globals.getRainbowLogo(height: 80, width: 100, withName: false),
+              SizedBox(height: 10)
+            ],
           ),
-          backgroundColor: const Color.fromARGB(255, 143, 201, 238),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
         drawer: DrawerGlobal(contextFrom: context),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: homePage(),
+          child: homePage(context: context),
         ));
   }
 
-  homePage() {
+  homePage({required BuildContext context}) {
+    Globals globals = Globals();
     return Center(
       child: SizedBox(
-        height: 600,
-        width: 300,
+        width: MediaQuery.of(context).size.width - 10,
+        height: MediaQuery.of(context).size.height - 10,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             actionsButton(),
             actionsButton2(),
             const SizedBox(height: 20),
-            lastCases()
+            globals.textWithRainbowPolice(
+                textData: 'Derniers cases ouverts',
+                weight: FontWeight.w700,
+                align: TextAlign.center,
+                size: 20),
+            lastCases(context: context),
           ],
         ),
       ),
     );
   }
 
-  lastCases() {
+  lastCases({required BuildContext context}) {
     return SizedBox(
-      width: 300,
-      height: 300,
+      height: 180,
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance.collection('cases').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           }
-    
-          return ListView(
-            scrollDirection: Axis.horizontal,
-            children: snapshot.data!.docs.map((doc) {
-              return Card(
-                child: ListTile(
-                  title: Text(doc.data()['cheveux']),
-                ),
-              );
-            }).toList(),
+
+          return Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: snapshot.data!.docs.map((doc) {
+                return Card(
+                  child: SizedBox(
+                    width: 150,
+                    child: ListTile(
+                      title: Text(doc.data()['prenom']),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           );
         },
       ),
@@ -104,6 +118,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            backgroundColor: Color.fromARGB(255, 255, 79, 79),
             heroTag: 'addButton',
             onPressed: () {
               Navigator.push(context,
@@ -125,6 +140,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            backgroundColor: const Color.fromARGB(255, 246, 235, 133),
             heroTag: 'searchButton',
             onPressed: () {
               Navigator.push(context,
@@ -146,6 +162,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            backgroundColor: const Color.fromARGB(255, 157, 211, 255),
             heroTag: 'favoriteButton',
             onPressed: () {},
             child: const Icon(Icons.favorite),
@@ -164,6 +181,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            backgroundColor: Color.fromARGB(255, 166, 122, 174),
             heroTag: 'settingsButton',
             onPressed: () {},
             child: const Icon(Icons.settings),

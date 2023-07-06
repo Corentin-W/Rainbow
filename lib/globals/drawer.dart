@@ -12,20 +12,15 @@ class DrawerGlobal extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text('Drawer Header'),
-          ),
+          SizedBox(height: 60),
           ListTile(
             leading: const Icon(
               Icons.home,
             ),
             title: const Text('Accueil'),
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const Home()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home()));
             },
           ),
           ListTile(

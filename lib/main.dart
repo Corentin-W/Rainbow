@@ -23,16 +23,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: const [
-         GlobalMaterialLocalizations.delegate
-       ],
-       supportedLocales: const [
-          Locale('fr')
-       ],
+      localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+      supportedLocales: const [Locale('fr')],
       debugShowCheckedModeBanner: false,
       title: 'Rainbow',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 255, 255, 255)),
         useMaterial3: true,
       ),
       darkTheme: ThemeData.dark(),
