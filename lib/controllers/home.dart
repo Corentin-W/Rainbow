@@ -22,10 +22,10 @@ class _HomeState extends State<Home> {
           title: Column(
             children: [
               globals.getRainbowLogo(height: 80, width: 100, withName: false),
-              SizedBox(height: 10)
+              const SizedBox(height: 10)
             ],
           ),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         ),
         drawer: DrawerGlobal(contextFrom: context),
         body: SingleChildScrollView(
@@ -72,6 +72,7 @@ class _HomeState extends State<Home> {
             child: ListView(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               children: snapshot.data!.docs.map((doc) {
                 return Card(
                   child: SizedBox(
@@ -118,13 +119,16 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
-            backgroundColor: Color.fromARGB(255, 255, 79, 79),
+            backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             heroTag: 'addButton',
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Warning()));
             },
-            child: const Icon(Icons.add),
+            child: const Icon(
+              Icons.add,
+              color: Color.fromARGB(255, 87, 49, 49),
+            ),
           ),
         ),
         const SizedBox(height: 5),
@@ -140,7 +144,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(255, 246, 235, 133),
+            backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             heroTag: 'searchButton',
             onPressed: () {
               Navigator.push(context,
@@ -162,7 +166,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(255, 157, 211, 255),
+            backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             heroTag: 'favoriteButton',
             onPressed: () {},
             child: const Icon(Icons.favorite),
@@ -181,7 +185,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
-            backgroundColor: Color.fromARGB(255, 166, 122, 174),
+            backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             heroTag: 'settingsButton',
             onPressed: () {},
             child: const Icon(Icons.settings),

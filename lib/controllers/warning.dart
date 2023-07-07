@@ -8,14 +8,21 @@ class Warning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [logo(), textWarning(), buttonWarning(context: context)],
+    return Hero(
+      tag: 'addButton',
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                logo(),
+                textWarning(),
+                buttonWarning(context: context)
+              ],
+            ),
           ),
         ),
       ),

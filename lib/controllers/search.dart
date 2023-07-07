@@ -18,10 +18,10 @@ class _SearchState extends State<Search> {
         title: const Text(
           'Rainbow',
         ),
-        backgroundColor: Color.fromARGB(255, 143, 201, 238),
+        backgroundColor: const Color.fromARGB(255, 143, 201, 238),
       ),
       drawer: DrawerGlobal(contextFrom: context),
-      body: Text('deweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeata'),
+      body: const Text('deweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeata'),
     );
   }
 }

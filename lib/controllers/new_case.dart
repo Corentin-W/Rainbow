@@ -32,10 +32,13 @@ class _NewCaseState extends State<NewCase> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Rainbow',
+        title: Column(
+          children: [
+            globals.getRainbowLogo(height: 80, width: 100, withName: false),
+            const SizedBox(height: 10)
+          ],
         ),
-        backgroundColor: const Color.fromARGB(255, 143, 201, 238),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       drawer: DrawerGlobal(contextFrom: context),
       body: form(),
@@ -142,12 +145,6 @@ class _NewCaseState extends State<NewCase> {
                   MaterialPageRoute(builder: (context) => HomeCase(id: docID)),
                 );
               }
-
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (BuildContext context) => HomeCase(id: docID)),
-              // );
             },
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -452,8 +449,7 @@ class _NewCaseState extends State<NewCase> {
                   strictbounds: false,
                   components: [Component(Component.country, 'fr')],
                   //google_map_webservice package
-                  onError: (err) {
-                  });
+                  onError: (err) {});
 
               if (place != null) {
                 setState(() {
