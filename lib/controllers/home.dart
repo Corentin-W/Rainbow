@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:nouga/controllers/home_case.dart';
 import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
 import '../globals/drawer.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -62,7 +64,8 @@ class _HomeState extends State<Home> {
     return SizedBox(
       height: 180,
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance.collection('cases').snapshots(),
+        stream:
+            FirebaseFirestore.instance.collection('cases').limit(6).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
@@ -74,11 +77,30 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               children: snapshot.data!.docs.map((doc) {
+                DateTime date = doc.data()['date'].toDate();
+                Duration difference = DateTime.now().difference(date);
+
+                int days = difference.inDays;
+                int hours = difference.inHours % 24;
+                int minutes = difference.inMinutes % 60;
                 return Card(
-                  child: SizedBox(
-                    width: 150,
-                    child: ListTile(
-                      title: Text(doc.data()['prenom']),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomeCase(id: doc.id)),
+                      );
+                    },
+                    child: SizedBox(
+                      width: 200,
+                      height: 250,
+                      child: ListTile(
+                        title: Text(
+                            doc.data()['prenom'] + ' ' + doc.data()['nom']),
+                        subtitle: Text(
+                            'Disparu(e) depuis $days jours, $hours heure(s) et $minutes minute(s)'),
+                      ),
                     ),
                   ),
                 );
@@ -167,7 +189,7 @@ class _HomeState extends State<Home> {
           width: 100,
           child: FloatingActionButton(
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-            heroTag: 'favoriteButton',
+            heroTag: 'Mes cases suivis',
             onPressed: () {},
             child: const Icon(Icons.favorite),
           ),
@@ -186,7 +208,7 @@ class _HomeState extends State<Home> {
           width: 100,
           child: FloatingActionButton(
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-            heroTag: 'settingsButton',
+            heroTag: 'Parametres',
             onPressed: () {},
             child: const Icon(Icons.settings),
           ),

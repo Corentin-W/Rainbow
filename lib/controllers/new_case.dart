@@ -140,7 +140,7 @@ class _NewCaseState extends State<NewCase> {
               DocumentReference docRef = await instance.add(docData);
               String docID = docRef.id;
               if (context.mounted) {
-                Navigator.pop(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomeCase(id: docID)),
                 );
