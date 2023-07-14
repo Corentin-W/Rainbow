@@ -41,7 +41,6 @@ class _HomeState extends State<Home> {
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width - 10,
-        height: MediaQuery.of(context).size.height - 10,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -61,8 +60,9 @@ class _HomeState extends State<Home> {
   }
 
   lastCases({required BuildContext context}) {
+    final Globals globals = new Globals();
     return SizedBox(
-      height: 180,
+      height: 350,
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream:
             FirebaseFirestore.instance.collection('cases').limit(6).snapshots(),
@@ -84,6 +84,7 @@ class _HomeState extends State<Home> {
                 int hours = difference.inHours % 24;
                 int minutes = difference.inMinutes % 60;
                 return Card(
+                  elevation: 5,
                   child: InkWell(
                     onTap: () {
                       Navigator.push(
@@ -92,14 +93,44 @@ class _HomeState extends State<Home> {
                             builder: (context) => HomeCase(id: doc.id)),
                       );
                     },
-                    child: SizedBox(
-                      width: 200,
-                      height: 250,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  'https://www.missnumerique.com/blog/wp-content/uploads/reussir-sa-photo-de-profil-michael-dam.jpg'))),
+                      width: 270,
+                      height: 320,
                       child: ListTile(
-                        title: Text(
-                            doc.data()['prenom'] + ' ' + doc.data()['nom']),
-                        subtitle: Text(
-                            'Disparu(e) depuis $days jours, $hours heure(s) et $minutes minute(s)'),
+                        title: globals.textWithRainbowPolice(
+                            textData:
+                                doc.data()['prenom'] + ' ' + doc.data()['nom'],
+                            align: TextAlign.left,
+                            size: 13,
+                            weight: FontWeight.w900,
+                            color: Colors.white),
+                        subtitle: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              globals.textWithRainbowPolice(
+                                  textData: 'Vu(e) pour la derniere fois a ' +
+                                      doc.data()['localisation'],
+                                  align: TextAlign.left,
+                                  size: 12,
+                                  weight: FontWeight.w600,
+                                  color: Colors.white),
+                              globals.textWithRainbowPolice(
+                                  textData:
+                                      'Disparu(e) depuis $days jours, $hours heure(s) et $minutes minute(s)',
+                                  align: TextAlign.left,
+                                  size: 12,
+                                  weight: FontWeight.w600,
+                                  color: Colors.white),
+                              SizedBox(
+                                height: 50,
+                              )
+                            ]),
                       ),
                     ),
                   ),

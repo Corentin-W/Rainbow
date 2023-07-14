@@ -120,30 +120,32 @@ class _NewCaseState extends State<NewCase> {
               } else if (dropdownvalueCheveux == "Couleur des cheveux") {
                 showAlert(context, 'Taille');
               } else if (localisation == "") {
-                showAlert(context, 'Vu(e) la derniere fois q');
-              }
-              UserService userService = UserService();
-              final userDataEmail = await userService.getCurrentUserEmail();
-              final docData = {
-                "prenom": prenomPersonneDisparue.text,
-                "nom": nomPersonneDisparue.text,
-                "age": agePersonneDisparue.text,
-                "description_vetements": descriptionPersonneDisparue.text,
-                "cheveux": dropdownvalueCheveux,
-                "date": date,
-                "taille": dropdownValueTaille,
-                "localisation": localisation,
-                "user_email": userDataEmail
-              };
-              FirebaseFirestore db = FirebaseFirestore.instance;
-              final instance = db.collection("cases");
-              DocumentReference docRef = await instance.add(docData);
-              String docID = docRef.id;
-              if (context.mounted) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeCase(id: docID)),
-                );
+                showAlert(context, 'Vu(e) la derniere fois a');
+              } else {
+                UserService userService = UserService();
+                final userDataEmail = await userService.getCurrentUserEmail();
+                final docData = {
+                  "prenom": prenomPersonneDisparue.text,
+                  "nom": nomPersonneDisparue.text,
+                  "age": agePersonneDisparue.text,
+                  "description_vetements": descriptionPersonneDisparue.text,
+                  "cheveux": dropdownvalueCheveux,
+                  "date": date,
+                  "taille": dropdownValueTaille,
+                  "localisation": localisation,
+                  "user_email": userDataEmail
+                };
+                FirebaseFirestore db = FirebaseFirestore.instance;
+                final instance = db.collection("cases");
+                DocumentReference docRef = await instance.add(docData);
+                String docID = docRef.id;
+                if (context.mounted) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeCase(id: docID)),
+                  );
+                }
               }
             },
             child: Padding(

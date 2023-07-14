@@ -27,11 +27,11 @@ class Globals {
     }
   }
 
-  textWithRainbowPolice({required textData, required size, required weight, required TextAlign align}) {
+  textWithRainbowPolice({required textData, required size, required weight, required TextAlign align, Color color = Colors.black}) {
     return Text(textData, textAlign: align,
         style: GoogleFonts.comfortaa(
             textStyle: TextStyle(
-                fontSize: size.toDouble(), fontWeight: weight, )));
+                fontSize: size.toDouble(), fontWeight: weight, color: color )));
   }
 
   signOut() async {
