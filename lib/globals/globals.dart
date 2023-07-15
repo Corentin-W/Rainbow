@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,11 +28,17 @@ class Globals {
     }
   }
 
-  textWithRainbowPolice({required textData, required size, required weight, required TextAlign align, Color color = Colors.black}) {
-    return Text(textData, textAlign: align,
+  textWithRainbowPolice(
+      {required textData,
+      required size,
+      required weight,
+      required TextAlign align,
+      Color color = Colors.black}) {
+    return Text(textData,
+        textAlign: align,
         style: GoogleFonts.comfortaa(
             textStyle: TextStyle(
-                fontSize: size.toDouble(), fontWeight: weight, color: color )));
+                fontSize: size.toDouble(), fontWeight: weight, color: color)));
   }
 
   signOut() async {
@@ -49,5 +56,10 @@ class Globals {
     }
   }
 
-  
+  Future<List<dynamic>> getAllInfosFromCase({required String caseID}) async {
+    final request =
+        await FirebaseFirestore.instance.collection('cases').doc(caseID).get();
+    final data = request.data()!;
+    return data.values.toList();
+  }
 }
