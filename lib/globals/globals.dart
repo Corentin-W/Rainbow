@@ -56,10 +56,12 @@ class Globals {
     }
   }
 
-  Future<List<dynamic>> getAllInfosFromCase({required String caseID}) async {
+  Future<Map<String, dynamic>> getAllInfosFromCase(
+      {required String caseID}) async {
     final request =
         await FirebaseFirestore.instance.collection('cases').doc(caseID).get();
     final data = request.data()!;
-    return data.values.toList();
+    // final fieldNames = data.keys.toList();
+    return data;
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
 
@@ -17,13 +16,14 @@ class HomeCase extends StatefulWidget {
 }
 
 class _HomeCaseState extends State<HomeCase> {
-  late var caseInfos;
+  late var caseInfos = {};
 
   @override
-  void initState() {
+  initState() {
     super.initState();
-    caseInfos = widget.globals.getAllInfosFromCase(caseID: widget.id);
-    print(caseInfos['nom']);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      caseInfos = await widget.globals.getAllInfosFromCase(caseID: widget.id);
+    });
   }
 
   @override
@@ -65,15 +65,51 @@ class _HomeCaseState extends State<HomeCase> {
     );
   }
 
-  enTete() {
-    return widget.globals.textWithRainbowPolice(
-        textData: 'testtttt',
-        align: TextAlign.center,
-        size: 20,
-        weight: FontWeight.w600);
+  Widget enTete() {
+    final prenom = caseInfos['prenom'];
+    final nom = caseInfos['nom'];
+    if (prenom != null && nom != null) {
+      return widget.globals.textWithRainbowPolice(
+          textData: prenom + ' ' + nom,
+          align: TextAlign.center,
+          size: 20,
+          weight: FontWeight.w600);
+    } else {
+      return Container();
+    }
   }
 
   ficheInfo() {
-    return Text('fiche info');
+    final age = caseInfos['age'];
+    if (age != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                        'https://www.missnumerique.com/blog/wp-content/uploads/reussir-sa-photo-de-profil-michael-dam.jpg'))),
+            width: 150,
+            height: 170,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              widget.globals.textWithRainbowPolice(
+                  textData: 'Age :  ' + caseInfos['age'],
+                  align: TextAlign.center,
+                  size: 20,
+                  weight: FontWeight.w600)
+            ],
+          )
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }
