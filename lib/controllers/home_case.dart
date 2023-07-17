@@ -16,16 +16,6 @@ class HomeCase extends StatefulWidget {
 }
 
 class _HomeCaseState extends State<HomeCase> {
-  late var caseInfos = {};
-
-  @override
-  initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      caseInfos = await widget.globals.getAllInfosFromCase(caseID: widget.id);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,29 +35,48 @@ class _HomeCaseState extends State<HomeCase> {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: columnHomeCases(),
+          child: streamPage(),
         ),
       ),
     );
   }
 
-  columnHomeCases() {
+  streamPage() {
+    return StreamBuilder(
+      stream: widget.globals.getAllInfosFromCase(caseID: widget.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          print(snapshot);
+          print('ici');
+          print(snapshot.data!['prenom']);
+          return columnHomeCases(infosCase: snapshot);
+          // return Text('zon');
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  columnHomeCases({required infosCase}) {
     return Center(
       child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(height: 20),
-            enTete(),
+            enTete(infosCases: infosCase),
             SizedBox(height: 20),
-            ficheInfo()
+            // ficheInfo()
           ]),
     );
   }
 
-  Widget enTete() {
-    final prenom = caseInfos['prenom'];
-    final nom = caseInfos['nom'];
+  Widget enTete({required infosCases}) {
+    final prenom = infosCases.data!['prenom'];
+    print(prenom);
+    final nom = infosCases.data!['nom'];
+    print(nom);
     if (prenom != null && nom != null) {
       return widget.globals.textWithRainbowPolice(
           textData: prenom + ' ' + nom,
@@ -79,8 +88,8 @@ class _HomeCaseState extends State<HomeCase> {
     }
   }
 
-  ficheInfo() {
-    final age = caseInfos['age'];
+  ficheInfo({required infosCases}) {
+    final age = infosCases['age'];
     if (age != null) {
       return Row(
         mainAxisSize: MainAxisSize.max,
@@ -89,7 +98,7 @@ class _HomeCaseState extends State<HomeCase> {
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
+                image: const DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
                         'https://www.missnumerique.com/blog/wp-content/uploads/reussir-sa-photo-de-profil-michael-dam.jpg'))),
@@ -100,7 +109,7 @@ class _HomeCaseState extends State<HomeCase> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               widget.globals.textWithRainbowPolice(
-                  textData: 'Age :  ' + caseInfos['age'],
+                  textData: 'Age :  ' + infosCases['age'],
                   align: TextAlign.center,
                   size: 20,
                   weight: FontWeight.w600)

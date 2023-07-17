@@ -56,12 +56,22 @@ class Globals {
     }
   }
 
-  Future<Map<String, dynamic>> getAllInfosFromCase(
-      {required String caseID}) async {
-    final request =
-        await FirebaseFirestore.instance.collection('cases').doc(caseID).get();
-    final data = request.data()!;
-    // final fieldNames = data.keys.toList();
-    return data;
+  // Future<Map<String, dynamic>> getAllInfosFromCase(
+  //     {required String caseID}) async {
+  //   final request =
+  //       await FirebaseFirestore.instance.collection('cases').doc(caseID).get();
+  //   final data = request.data()!;
+  //   // final fieldNames = data.keys.toList();
+  //   return data;
+  // }
+
+  Stream<Map<String, dynamic>> getAllInfosFromCase(
+    {required String caseID}) async* {
+  final request =
+      FirebaseFirestore.instance.collection('cases').doc(caseID).snapshots();
+  await for (final snapshot in request) {
+    final data = snapshot.data()!;
+    yield data;
   }
+}
 }
