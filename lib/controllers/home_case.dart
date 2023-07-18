@@ -168,7 +168,7 @@ class _HomeCaseState extends State<HomeCase> {
   final List<String> imgList = [
     'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
     'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
-    'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
+    'https://hips.hearstapps.com/hmg-prod/images/best-summer-instagram-captions-1619209703.jpg',
   ];
 
   late final List<Widget> imageSliders = imgList
