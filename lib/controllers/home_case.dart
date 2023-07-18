@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
@@ -5,7 +6,8 @@ import '../globals/globals.dart';
 class HomeCase extends StatefulWidget {
   String id;
   Globals globals = Globals();
-
+final CarouselController _controller = CarouselController();
+    int _current = 0;
   HomeCase({
     Key? key,
     required this.id,
@@ -67,6 +69,7 @@ class _HomeCaseState extends State<HomeCase> {
             SizedBox(height: 20),
             enTete(infosCases: infosCase),
             SizedBox(height: 20),
+            carouselWidget()
             // ficheInfo()
           ]),
     );
@@ -121,4 +124,84 @@ class _HomeCaseState extends State<HomeCase> {
       return Container();
     }
   }
+
+  carouselWidget() {
+    
+    return Column(
+      children: [
+        CarouselSlider(
+          items: imageSliders,
+          carouselController: widget._controller,
+          options: CarouselOptions(
+              autoPlay: false,
+              enlargeCenterPage: true,
+              aspectRatio: 1,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  widget._current = index;
+                });
+              }),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: imgList.asMap().entries.map((entry) {
+            return GestureDetector(
+              onTap: () => widget._controller.animateToPage(entry.key),
+              child: Container(
+                  width: 12,
+                  height: 12,
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 4.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: (Theme.of(context).brightness == Brightness.dark
+                              ? const Color.fromARGB(255, 0, 0, 0)
+                              : Color.fromARGB(175, 255, 239, 8))
+                          .withOpacity(widget._current == entry.key ? 0.9 : 0.4))),
+            );
+          }).toList(),
+        )
+      ],
+    );
+  }
+
+  final List<String> imgList = [
+    'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
+    'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
+    'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
+  ];
+
+  late final List<Widget> imageSliders = imgList
+      .map((item) => Container(
+            child: Container(
+              margin: EdgeInsets.all(1.0),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Stack(
+                    children: <Widget>[
+                      Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color.fromARGB(200, 0, 0, 0),
+                                Color.fromARGB(0, 0, 0, 0)
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 5.0),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+          ))
+      .toList();
 }
