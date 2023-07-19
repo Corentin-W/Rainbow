@@ -6,8 +6,8 @@ import '../globals/globals.dart';
 class HomeCase extends StatefulWidget {
   String id;
   Globals globals = Globals();
-final CarouselController _controller = CarouselController();
-    int _current = 0;
+  final CarouselController _controller = CarouselController();
+  int _current = 0;
   HomeCase({
     Key? key,
     required this.id,
@@ -69,8 +69,11 @@ class _HomeCaseState extends State<HomeCase> {
             SizedBox(height: 20),
             enTete(infosCases: infosCase),
             SizedBox(height: 20),
-            carouselWidget()
-            // ficheInfo()
+            carouselWidget(),
+            SizedBox(height: 20),
+            actionsButtons(),
+            SizedBox(height: 20),
+            ficheInfo(infosCases: infosCase)
           ]),
     );
   }
@@ -92,32 +95,53 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   ficheInfo({required infosCases}) {
-    final age = infosCases['age'];
+    DateTime date = infosCases.data!['date'].toDate();
+    Duration difference = DateTime.now().difference(date);
+    int days = difference.inDays;
+    int hours = difference.inHours % 24;
+    int minutes = difference.inMinutes % 60;
+    final age = infosCases.data!['age'];
     if (age != null) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: const DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://www.missnumerique.com/blog/wp-content/uploads/reussir-sa-photo-de-profil-michael-dam.jpg'))),
-            width: 150,
-            height: 170,
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                widget.globals.textWithRainbowPolice(
+                    textData: 'Age :  ' + infosCases.data!['age'] + ' ans',
+                    align: TextAlign.center,
+                    size: 15,
+                    weight: FontWeight.w600),
+                widget.globals.textWithRainbowPolice(
+                    textData: 'Cheveux :  ' + infosCases.data!['cheveux'],
+                    align: TextAlign.center,
+                    size: 15,
+                    weight: FontWeight.w600),
+                widget.globals.textWithRainbowPolice(
+                    textData: 'Taille :  ' + infosCases.data!['taille'] + ' cm',
+                    align: TextAlign.center,
+                    size: 15,
+                    weight: FontWeight.w600),
+                widget.globals.textWithRainbowPolice(
+                    textData: 'Vetements :  ' +
+                        infosCases.data!['description_vetements'],
+                    align: TextAlign.center,
+                    size: 15,
+                    weight: FontWeight.w600),
+                widget.globals.textWithRainbowPolice(
+                    textData:
+                        'Derniere apparition il y a $days jours, $hours heure(s) et $minutes minute(s) a ' +
+                            infosCases.data!['localisation'],
+                    align: TextAlign.center,
+                    size: 15,
+                    weight: FontWeight.w600)
+              ],
+            ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              widget.globals.textWithRainbowPolice(
-                  textData: 'Age :  ' + infosCases['age'],
-                  align: TextAlign.center,
-                  size: 20,
-                  weight: FontWeight.w600)
-            ],
-          )
         ],
       );
     } else {
@@ -126,7 +150,6 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   carouselWidget() {
-    
     return Column(
       children: [
         CarouselSlider(
@@ -157,7 +180,8 @@ class _HomeCaseState extends State<HomeCase> {
                       color: (Theme.of(context).brightness == Brightness.dark
                               ? const Color.fromARGB(255, 0, 0, 0)
                               : Color.fromARGB(175, 255, 239, 8))
-                          .withOpacity(widget._current == entry.key ? 0.9 : 0.4))),
+                          .withOpacity(
+                              widget._current == entry.key ? 0.9 : 0.4))),
             );
           }).toList(),
         )
@@ -204,4 +228,28 @@ class _HomeCaseState extends State<HomeCase> {
             ),
           ))
       .toList();
+
+  actionsButtons() {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        FloatingActionButton.small(
+          elevation: 3,
+          onPressed: () {
+            print('here');
+          },
+          child: Icon(Icons.people),
+        ),
+        SizedBox(width: 10),
+        FloatingActionButton.small(
+          elevation: 3,
+          onPressed: () {
+            print('here');
+          },
+          child: Icon(Icons.favorite),
+        )
+      ],
+    );
+  }
 }
