@@ -48,11 +48,7 @@ class _HomeCaseState extends State<HomeCase> {
       stream: widget.globals.getAllInfosFromCase(caseID: widget.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print(snapshot);
-          print('ici');
-          print(snapshot.data!['prenom']);
           return columnHomeCases(infosCase: snapshot);
-          // return Text('zon');
         } else {
           return const CircularProgressIndicator();
         }
@@ -200,29 +196,10 @@ class _HomeCaseState extends State<HomeCase> {
             child: Container(
               margin: EdgeInsets.all(1.0),
               child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   child: Stack(
                     children: <Widget>[
                       Image.network(item, fit: BoxFit.cover, width: 1000.0),
-                      Positioned(
-                        bottom: 0.0,
-                        left: 0.0,
-                        right: 0.0,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color.fromARGB(200, 0, 0, 0),
-                                Color.fromARGB(0, 0, 0, 0)
-                              ],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 5.0),
-                        ),
-                      ),
                     ],
                   )),
             ),
@@ -235,14 +212,16 @@ class _HomeCaseState extends State<HomeCase> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         FloatingActionButton.small(
+          backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
           onPressed: () {
             print('here');
           },
-          child: Icon(Icons.people),
+          child: Icon(Icons.message),
         ),
         SizedBox(width: 10),
         FloatingActionButton.small(
+          backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
           onPressed: () {
             print('here');
