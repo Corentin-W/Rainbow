@@ -57,28 +57,23 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   columnHomeCases({required infosCase}) {
-    return Center(
-      child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(height: 20),
-            enTete(infosCases: infosCase),
-            SizedBox(height: 20),
-            carouselWidget(),
-            SizedBox(height: 20),
-            actionsButtons(),
-            SizedBox(height: 20),
-            ficheInfo(infosCases: infosCase)
-          ]),
-    );
+    return Column(children: [
+      SizedBox(height: 20),
+      enTete(infosCases: infosCase),
+      SizedBox(height: 5),
+      sousPartie(infosCases: infosCase),
+      SizedBox(height: 20),
+      carouselWidget(),
+      SizedBox(height: 20),
+      actionsButtons(),
+      SizedBox(height: 20),
+      ficheInfo(infosCases: infosCase)
+    ]);
   }
 
   Widget enTete({required infosCases}) {
     final prenom = infosCases.data!['prenom'];
-    print(prenom);
     final nom = infosCases.data!['nom'];
-    print(nom);
     if (prenom != null && nom != null) {
       return widget.globals.textWithRainbowPolice(
           textData: prenom + ' ' + nom,
@@ -91,58 +86,32 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   ficheInfo({required infosCases}) {
-    DateTime date = infosCases.data!['date'].toDate();
-    Duration difference = DateTime.now().difference(date);
-    int days = difference.inDays;
-    int hours = difference.inHours % 24;
-    int minutes = difference.inMinutes % 60;
-    final age = infosCases.data!['age'];
-    if (age != null) {
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                widget.globals.textWithRainbowPolice(
-                    textData: 'Age :  ' + infosCases.data!['age'] + ' ans',
-                    align: TextAlign.center,
-                    size: 15,
-                    weight: FontWeight.w600),
-                widget.globals.textWithRainbowPolice(
-                    textData: 'Cheveux :  ' + infosCases.data!['cheveux'],
-                    align: TextAlign.center,
-                    size: 15,
-                    weight: FontWeight.w600),
-                widget.globals.textWithRainbowPolice(
-                    textData: 'Taille :  ' + infosCases.data!['taille'] + ' cm',
-                    align: TextAlign.center,
-                    size: 15,
-                    weight: FontWeight.w600),
-                widget.globals.textWithRainbowPolice(
-                    textData: 'Vetements :  ' +
-                        infosCases.data!['description_vetements'],
-                    align: TextAlign.center,
-                    size: 15,
-                    weight: FontWeight.w600),
-                widget.globals.textWithRainbowPolice(
-                    textData:
-                        'Derniere apparition il y a $days jours, $hours heure(s) et $minutes minute(s) a ' +
-                            infosCases.data!['localisation'],
-                    align: TextAlign.center,
-                    size: 15,
-                    weight: FontWeight.w600)
-              ],
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Container();
-    }
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        widget.globals.textWithRainbowPolice(
+            textData: 'Age :  ' + infosCases.data!['age'] + ' ans',
+            align: TextAlign.start,
+            size: 15,
+            weight: FontWeight.w600),
+        widget.globals.textWithRainbowPolice(
+            textData: 'Cheveux :  ' + infosCases.data!['cheveux'],
+            align: TextAlign.start,
+            size: 15,
+            weight: FontWeight.w600),
+        widget.globals.textWithRainbowPolice(
+            textData: 'Taille :  ' + infosCases.data!['taille'] + ' cm',
+            align: TextAlign.start,
+            size: 15,
+            weight: FontWeight.w600),
+        widget.globals.textWithRainbowPolice(
+            textData:
+                'Vetements :  ' + infosCases.data!['description_vetements'],
+            align: TextAlign.start,
+            size: 15,
+            weight: FontWeight.w600)
+      ],
+    );
   }
 
   carouselWidget() {
@@ -230,5 +199,24 @@ class _HomeCaseState extends State<HomeCase> {
         )
       ],
     );
+  }
+
+  sousPartie({required infosCases}) {
+    DateTime date = infosCases.data!['date'].toDate();
+    Duration difference = DateTime.now().difference(date);
+    int days = difference.inDays;
+    int hours = difference.inHours % 24;
+    int minutes = difference.inMinutes % 60;
+    final localisation = infosCases.data!['localisation'];
+    return widget.globals.textWithRainbowPolice(
+        textData: 'Disparition depuis ' +
+            days.toString() +
+            ' jour(s) et ' +
+            hours.toString() +
+            ' heure(s), a ' +
+            localisation,
+        align: TextAlign.center,
+        size: 12,
+        weight: FontWeight.w400);
   }
 }
