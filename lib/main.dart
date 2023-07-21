@@ -8,11 +8,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'controllers/boarding.dart';
 import 'controllers/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  AuthService authService = AuthService();
+  User? user = await authService.getUser();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  print('one');
+  print(user?.uid);
+  prefs.setString('userId', user?.uid ?? '');
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
 }

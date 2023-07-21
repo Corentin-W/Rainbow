@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../controllers/contact.dart';
 import '../controllers/home.dart';
 import '../controllers/informations.dart';
+import '../controllers/warning.dart';
 
 class DrawerGlobal extends StatelessWidget {
   const DrawerGlobal({super.key, required BuildContext contextFrom});
@@ -23,15 +25,7 @@ class DrawerGlobal extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const Home()));
             },
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.plus_one,
-            ),
-            title: const Text('Creer un case'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+          
           ListTile(
             leading: const Icon(
               Icons.favorite_border,
@@ -59,7 +53,10 @@ class DrawerGlobal extends StatelessWidget {
             ),
             title: const Text('Politique generale'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Informations()));
             },
           ),
           ListTile(
@@ -68,7 +65,10 @@ class DrawerGlobal extends StatelessWidget {
             ),
             title: const Text('Contact'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Contact()));
             },
           ),
           ListTile(

@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
+import '../services/user_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeCase extends StatefulWidget {
   String id;
@@ -18,8 +20,27 @@ class HomeCase extends StatefulWidget {
 }
 
 class _HomeCaseState extends State<HomeCase> {
+  late SharedPreferences prefs;
+  String userID = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userID = prefs.getString('userId') ?? "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+      print('two');
+          print(userID);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -48,6 +69,7 @@ class _HomeCaseState extends State<HomeCase> {
       stream: widget.globals.getAllInfosFromCase(caseID: widget.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          print(snapshot);
           return columnHomeCases(infosCase: snapshot);
         } else {
           return const CircularProgressIndicator();
@@ -63,7 +85,7 @@ class _HomeCaseState extends State<HomeCase> {
       SizedBox(height: 5),
       sousPartie(infosCases: infosCase),
       SizedBox(height: 20),
-      carouselWidget(),
+      carouselWidget(infosCases: infosCase),
       SizedBox(height: 20),
       actionsButtons(),
       SizedBox(height: 20),
@@ -114,7 +136,7 @@ class _HomeCaseState extends State<HomeCase> {
     );
   }
 
-  carouselWidget() {
+  carouselWidget({required infosCases}) {
     return Column(
       children: [
         CarouselSlider(

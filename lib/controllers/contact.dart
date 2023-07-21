@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
 
-class Informations extends StatelessWidget {
-  const Informations({super.key});
+class Contact extends StatelessWidget {
+  const Contact({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class Informations extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       drawer: DrawerGlobal(contextFrom: context),
-      body: Text('jello'),
+      body: Text('contact'),
     );
   }
 }
