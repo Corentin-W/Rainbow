@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:nouga/controllers/pictures_case.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
 import '../services/user_service.dart';
@@ -21,7 +22,7 @@ class HomeCase extends StatefulWidget {
 
 class _HomeCaseState extends State<HomeCase> {
   late SharedPreferences prefs;
-  String userID = "";
+  String userEMAIL = "";
 
   @override
   void initState() {
@@ -32,14 +33,14 @@ class _HomeCaseState extends State<HomeCase> {
   Future<void> _initializeData() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      userID = prefs.getString('userId') ?? "";
+      userEMAIL = prefs.getString('userEmail') ?? "";
     });
   }
 
   @override
   Widget build(BuildContext context) {
-      print('two');
-          print(userID);
+    print('two');
+    print(userEMAIL);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +70,6 @@ class _HomeCaseState extends State<HomeCase> {
       stream: widget.globals.getAllInfosFromCase(caseID: widget.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print(snapshot);
           return columnHomeCases(infosCase: snapshot);
         } else {
           return const CircularProgressIndicator();
@@ -87,7 +87,7 @@ class _HomeCaseState extends State<HomeCase> {
       SizedBox(height: 20),
       carouselWidget(infosCases: infosCase),
       SizedBox(height: 20),
-      actionsButtons(),
+      actionsButtons(caseInfos: infosCase),
       SizedBox(height: 20),
       ficheInfo(infosCases: infosCase)
     ]);
@@ -197,11 +197,35 @@ class _HomeCaseState extends State<HomeCase> {
           ))
       .toList();
 
-  actionsButtons() {
+  actionsButtons({required caseInfos}) {
+    print('uno');
+    print(caseInfos.data!['user_email']);
+    String userOwnerCase = "";
+    if (caseInfos.data['user_email'] != null) {
+      userOwnerCase = caseInfos.data['user_email'];
+    }
+    print('dos');
+    print(userEMAIL);
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        if (userOwnerCase == userEMAIL) ...[
+          FloatingActionButton.small(
+            backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+            elevation: 3,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PicturesCase(
+                            caseID: widget.id,
+                          )));
+            },
+            child: const Icon(Icons.photo_camera),
+          ),
+          SizedBox(width: 10),
+        ],
         FloatingActionButton.small(
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,

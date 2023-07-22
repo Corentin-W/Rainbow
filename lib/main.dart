@@ -17,10 +17,10 @@ void main() async {
 
   AuthService authService = AuthService();
   User? user = await authService.getUser();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  print('one');
-  print(user?.uid);
   prefs.setString('userId', user?.uid ?? '');
+  prefs.setString('userEmail', user?.email ?? '');
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
