@@ -29,7 +29,7 @@ class _PicturesCaseState extends State<PicturesCase> {
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         ),
         drawer: DrawerGlobal(contextFrom: context),
-        body: Text('center'),
+        body: Text('rewind'),
     );
   }
 }
