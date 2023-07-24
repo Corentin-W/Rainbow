@@ -172,6 +172,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            heroTag: 'add',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {
               Navigator.push(context,
@@ -196,6 +197,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            heroTag: 'search',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {
               Navigator.push(context,
@@ -217,6 +219,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            heroTag: 'favorite',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {},
             child: const Icon(Icons.favorite),
@@ -235,6 +238,7 @@ class _HomeState extends State<Home> {
           height: 100,
           width: 100,
           child: FloatingActionButton(
+            heroTag: 'settings',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {},
             child: const Icon(Icons.settings),

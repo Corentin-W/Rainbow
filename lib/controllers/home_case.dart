@@ -212,6 +212,7 @@ class _HomeCaseState extends State<HomeCase> {
       children: [
         if (userOwnerCase == userEMAIL) ...[
           FloatingActionButton.small(
+            heroTag: 'pictures',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             elevation: 3,
             onPressed: () {
@@ -227,6 +228,7 @@ class _HomeCaseState extends State<HomeCase> {
           SizedBox(width: 10),
         ],
         FloatingActionButton.small(
+          heroTag: 'messages',
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
           onPressed: () {
@@ -236,6 +238,7 @@ class _HomeCaseState extends State<HomeCase> {
         ),
         SizedBox(width: 10),
         FloatingActionButton.small(
+          heroTag: 'favorite',
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
           onPressed: () {

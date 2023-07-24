@@ -52,6 +52,7 @@ dependencies:
   flutter_localization: ^0.1.12
   carousel_slider: ^4.2.1
   shared_preferences: ^2.2.0
+  firebase_storage: ^11.2.5
 
 dev_dependencies:
   flutter_test:
