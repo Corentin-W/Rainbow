@@ -21,7 +21,7 @@ class Informations extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       drawer: DrawerGlobal(contextFrom: context),
-      body: Text('jello'),
+      body: const Text('jello'),
     );
   }
 }

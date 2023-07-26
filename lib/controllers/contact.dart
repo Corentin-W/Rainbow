@@ -21,7 +21,7 @@ class Contact extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       drawer: DrawerGlobal(contextFrom: context),
-      body: Text('contact'),
+      body: const Text('contact'),
     );
   }
 }

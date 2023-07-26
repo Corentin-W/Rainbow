@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:nouga/controllers/pictures_case.dart';
@@ -39,8 +41,6 @@ class _HomeCaseState extends State<HomeCase> {
 
   @override
   Widget build(BuildContext context) {
-    print('two');
-    print(userEMAIL);
 
     return Scaffold(
       appBar: AppBar(
@@ -80,15 +80,15 @@ class _HomeCaseState extends State<HomeCase> {
 
   columnHomeCases({required infosCase}) {
     return Column(children: [
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       enTete(infosCases: infosCase),
-      SizedBox(height: 5),
+      const SizedBox(height: 5),
       sousPartie(infosCases: infosCase),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       carouselWidget(infosCases: infosCase),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       actionsButtons(caseInfos: infosCase),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       ficheInfo(infosCases: infosCase)
     ]);
   }
@@ -166,7 +166,7 @@ class _HomeCaseState extends State<HomeCase> {
                       shape: BoxShape.circle,
                       color: (Theme.of(context).brightness == Brightness.dark
                               ? const Color.fromARGB(255, 0, 0, 0)
-                              : Color.fromARGB(175, 255, 239, 8))
+                              : const Color.fromARGB(175, 255, 239, 8))
                           .withOpacity(
                               widget._current == entry.key ? 0.9 : 0.4))),
             );
@@ -185,9 +185,9 @@ class _HomeCaseState extends State<HomeCase> {
   late final List<Widget> imageSliders = imgList
       .map((item) => Container(
             child: Container(
-              margin: EdgeInsets.all(1.0),
+              margin: const EdgeInsets.all(1.0),
               child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   child: Stack(
                     children: <Widget>[
                       Image.network(item, fit: BoxFit.cover, width: 1000.0),
@@ -198,14 +198,10 @@ class _HomeCaseState extends State<HomeCase> {
       .toList();
 
   actionsButtons({required caseInfos}) {
-    print('uno');
-    print(caseInfos.data!['user_email']);
     String userOwnerCase = "";
     if (caseInfos.data['user_email'] != null) {
       userOwnerCase = caseInfos.data['user_email'];
     }
-    print('dos');
-    print(userEMAIL);
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -225,26 +221,24 @@ class _HomeCaseState extends State<HomeCase> {
             },
             child: const Icon(Icons.photo_camera),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
         FloatingActionButton.small(
           heroTag: 'messages',
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
           onPressed: () {
-            print('here');
           },
-          child: Icon(Icons.message),
+          child: const Icon(Icons.message),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         FloatingActionButton.small(
           heroTag: 'favorite',
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
           onPressed: () {
-            print('here');
           },
-          child: Icon(Icons.favorite),
+          child: const Icon(Icons.favorite),
         )
       ],
     );

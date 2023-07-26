@@ -12,6 +12,10 @@ class Globals {
                 fontSize: fontSize.toDouble(), fontWeight: FontWeight.w800)));
   }
 
+  getRainbowMainColor() {
+    return const Color.fromARGB(175, 255, 239, 8);
+  }
+
   getRainbowLogo({required width, required height, required bool withName}) {
     switch (withName) {
       case true:
@@ -66,12 +70,12 @@ class Globals {
   // }
 
   Stream<Map<String, dynamic>> getAllInfosFromCase(
-    {required String caseID}) async* {
-  final request =
-      FirebaseFirestore.instance.collection('cases').doc(caseID).snapshots();
-  await for (final snapshot in request) {
-    final data = snapshot.data()!;
-    yield data;
+      {required String caseID}) async* {
+    final request =
+        FirebaseFirestore.instance.collection('cases').doc(caseID).snapshots();
+    await for (final snapshot in request) {
+      final data = snapshot.data()!;
+      yield data;
+    }
   }
-}
 }

@@ -5,7 +5,6 @@ import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
 import '../globals/drawer.dart';
-import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -60,7 +59,7 @@ class _HomeState extends State<Home> {
   }
 
   lastCases({required BuildContext context}) {
-    final Globals globals = new Globals();
+    final Globals globals = Globals();
     return SizedBox(
       height: 350,
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -96,7 +95,7 @@ class _HomeState extends State<Home> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
-                          image: DecorationImage(
+                          image: const DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
                                   'https://www.missnumerique.com/blog/wp-content/uploads/reussir-sa-photo-de-profil-michael-dam.jpg'))),
@@ -127,7 +126,7 @@ class _HomeState extends State<Home> {
                                   size: 12,
                                   weight: FontWeight.w600,
                                   color: Colors.white),
-                              SizedBox(
+                              const SizedBox(
                                 height: 50,
                               )
                             ]),

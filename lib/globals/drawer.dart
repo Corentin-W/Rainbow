@@ -14,7 +14,7 @@ class DrawerGlobal extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          SizedBox(height: 60),
+          const SizedBox(height: 60),
           ListTile(
             leading: const Icon(
               Icons.home,
