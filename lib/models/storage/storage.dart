@@ -9,7 +9,8 @@ class Storage {
     print(listResult);
     List returnList = [];
     for (var item in listResult.items) {
-      returnList.add(item.getDownloadURL());
+      String downloadURL = await item.getDownloadURL();
+      returnList.add(downloadURL);
     }
     print(returnList);
     return returnList;

@@ -36,30 +36,22 @@ class _PicturesCaseState extends State<PicturesCase> {
       ),
       drawer: DrawerGlobal(contextFrom: context),
       body: FutureBuilder(
-          future: picturesList,
-          builder: ((context, snapshot) {
-            print(snapshot);
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              // Pendant que la récupération des images est en cours
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              // En cas d'erreur lors de la récupération des images
-              return Center(
-                  child: Text("Erreur lors du chargement des images"));
-            } else {
-              List<dynamic> images = snapshot.data;
-              return ListView.separated(
-                  itemBuilder: (context, index) {
-                    final url = images[index];
-                    print('salu');
-                    print(url.toString());
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
-                  itemCount: images.length);
-            }
-          })),
+        future: picturesList,
+        builder: (context, snapshot) {
+          print('fefefeff');
+          print(snapshot);
+          return ListView.separated(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              print(snapshot.data[index]);
+              return Image.network(snapshot.data[index]);
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+          );
+        },
+      ),
     );
   }
 }
