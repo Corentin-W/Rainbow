@@ -29,4 +29,32 @@ class Storage {
     await ref.delete();
     // Utilise la méthode delete() sur la référence pour supprimer le fichier correspondant
 }
+
+Future<String> uploadImage(File imageFile) async {
+  try {
+    // Créer une référence à Firebase Storage
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    // Obtenir le nom de fichier de l'image
+    String fileName = Path.basename(imageFile.path);
+
+    // Créer une référence à l'emplacement dans le stockage Firebase
+    Reference reference = storage.ref().child(fileName);
+
+    // Commencer l'upload
+    UploadTask uploadTask = reference.putFile(imageFile);
+
+    // Attendre que l'upload se termine
+    TaskSnapshot storageTaskSnapshot = await uploadTask;
+
+    // Récupérer l'URL de téléchargement de l'image
+    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+
+    // Retourner l'URL de téléchargement de l'image
+    return downloadUrl;
+  } catch (e) {
+    print('Erreur lors de l\'upload de l\'image : $e');
+    return null;
+  }
+}
 }
