@@ -1,4 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'dart:async';
+import 'dart:io';
 
 class Storage {
   getPicturesFromCase({required caseID}) async {
@@ -28,33 +33,29 @@ class Storage {
     // Appeler la fonction pour supprimer le fichier
     await ref.delete();
     // Utilise la méthode delete() sur la référence pour supprimer le fichier correspondant
-}
-
-Future<String> uploadImage(File imageFile) async {
-  try {
-    // Créer une référence à Firebase Storage
-    FirebaseStorage storage = FirebaseStorage.instance;
-
-    // Obtenir le nom de fichier de l'image
-    String fileName = Path.basename(imageFile.path);
-
-    // Créer une référence à l'emplacement dans le stockage Firebase
-    Reference reference = storage.ref().child(fileName);
-
-    // Commencer l'upload
-    UploadTask uploadTask = reference.putFile(imageFile);
-
-    // Attendre que l'upload se termine
-    TaskSnapshot storageTaskSnapshot = await uploadTask;
-
-    // Récupérer l'URL de téléchargement de l'image
-    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-
-    // Retourner l'URL de téléchargement de l'image
-    return downloadUrl;
-  } catch (e) {
-    print('Erreur lors de l\'upload de l\'image : $e');
-    return null;
   }
-}
+
+  uploadImage({required pathToStorage}) async {
+    final ImagePicker picker = ImagePicker();
+    // Pick an image.
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image == null) {
+      return;
+    } else {
+      final File selectedImage = File(image.path);
+      // Create a storage reference from our app
+      final storageRef = FirebaseStorage.instance.ref();
+
+      // Create a reference to "mountains.jpg"
+      final mountainsRef = storageRef.child(pathToStorage + 'test.jpg');
+
+      try {
+        mountainsRef.putFile(selectedImage);
+        return true;
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
 }

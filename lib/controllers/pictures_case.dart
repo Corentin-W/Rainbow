@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:html';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -23,21 +20,13 @@ class PicturesCase extends StatefulWidget {
 }
 
 class _PicturesCaseState extends State<PicturesCase> {
-  File? _imageFile;
-    final ImagePicker _picker = ImagePicker();
+  Storage storageInstance = Storage();
 
   @override
   Widget build(BuildContext context) {
-    Storage storageInstance = Storage();
     Future<dynamic> picturesList =
         storageInstance.getPicturesFromCase(caseID: widget.caseID);
     Globals globals = Globals();
-    firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-
-    
-
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -51,7 +40,7 @@ class _PicturesCaseState extends State<PicturesCase> {
       ),
       drawer: DrawerGlobal(contextFrom: context),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: FutureBuilder(
           future: picturesList,
@@ -102,8 +91,6 @@ class _PicturesCaseState extends State<PicturesCase> {
                                           TextButton(
                                             child: const Text('Supprimer'),
                                             onPressed: () {
-                                              storageInstance.deleteFileFromUrl(
-                                                  snapshot.data[index]);
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -179,13 +166,7 @@ class _PicturesCaseState extends State<PicturesCase> {
                                                   storageInstance
                                                       .deleteFileFromUrl(
                                                           snapshot.data[index]);
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              HomeCase(
-                                                                  id: widget
-                                                                      .caseID)));
+                                                  setState(() {});
                                                 },
                                               )
                                             ],
@@ -222,8 +203,10 @@ class _PicturesCaseState extends State<PicturesCase> {
       children: [
         Text('Vous pouvez ajouter 3 photos maximum'),
         IconButton(
-          onPressed: () {
-            print('salut');
+          onPressed: () async {
+            await storageInstance.uploadImage(
+                pathToStorage: 'cases/' + widget.caseID + '/pictures/');
+            setState(() {});
           },
           icon: Icon(
             Icons.add_a_photo,
@@ -231,47 +214,5 @@ class _PicturesCaseState extends State<PicturesCase> {
         )
       ],
     );
-  }
-
-    // Méthode pour ouvrir la galerie et sélectionner une image
-  Future<void> _pickImageFromGallery() async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          this._imageFile = File(pickedFile.path);
-        });
-      }
-    } catch (e) {
-      print("Error picking image from gallery: $e");
-    }
-  }
-
-  // Méthode pour télécharger l'image sélectionnée sur Firebase Storage
-  Future<void> _uploadImageToFirebase() async {
-    if (_imageFile == null) {
-      print("No image selected");
-      return;
-    }
-
-    try {
-      // Initialize Firebase if not already initialized
-      if (Firebase.apps.isEmpty) {
-        await Firebase.initializeApp();
-      }
-
-      // Reference to the Firebase Storage bucket where the image will be stored
-      final storage = FirebaseStorage.instance;
-      final Reference storageRef = storage.ref().child('images').child('image_${DateTime.now()}.png');
-
-      // Upload the image to Firebase Storage
-      final TaskSnapshot uploadTask = await storageRef.putFile(_imageFile!);
-      final String downloadUrl = await uploadTask.ref.getDownloadURL();
-
-      // Display the URL of the uploaded image
-      print("Image uploaded successfully. Download URL: $downloadUrl");
-    } catch (e) {
-      print("Error uploading image to Firebase: $e");
-    }
   }
 }
