@@ -162,8 +162,8 @@ class _PicturesCaseState extends State<PicturesCase> {
                                               ),
                                               TextButton(
                                                 child: const Text('Supprimer'),
-                                                onPressed: () {
-                                                  storageInstance
+                                                onPressed: () async{
+                                                  await storageInstance
                                                       .deleteFileFromUrl(
                                                           snapshot.data[index]);
                                                   setState(() {});
