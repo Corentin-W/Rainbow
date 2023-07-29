@@ -4,14 +4,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:async';
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 class Storage {
   getPicturesFromCase({required caseID}) async {
-    print('zeparti');
     final storageRef =
         FirebaseStorage.instance.ref().child("cases/" + caseID + "/pictures/");
     final listResult = await storageRef.listAll();
-    print(listResult);
     List returnList = [];
     for (var item in listResult.items) {
       String downloadURL = await item.getDownloadURL();
@@ -47,8 +46,11 @@ class Storage {
       // Create a storage reference from our app
       final storageRef = FirebaseStorage.instance.ref();
 
+      // Get the file name and extension.
+      final fileName = p.basename(selectedImage.path);
+
       // Create a reference to "mountains.jpg"
-      final mountainsRef = storageRef.child(pathToStorage + 'test.jpg');
+      final mountainsRef = storageRef.child(pathToStorage + fileName);
 
       try {
         mountainsRef.putFile(selectedImage);
