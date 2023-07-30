@@ -51,12 +51,17 @@ class Storage {
 
       // Create a reference to "mountains.jpg"
       final mountainsRef = storageRef.child(pathToStorage + fileName);
-
+print('1');
       try {
-        mountainsRef.putFile(selectedImage);
-        return true;
+        print('2');
+        await mountainsRef.putFile(selectedImage);
+        String downloadUrl = await mountainsRef.getDownloadURL();
+        print('envoiiiii');
+        print(downloadUrl);
+        return downloadUrl;
       } catch (e) {
         print(e);
+        return 'error';
       }
     }
   }

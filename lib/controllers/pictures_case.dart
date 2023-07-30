@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:nouga/services/db_service.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
 import '../models/storage/storage.dart';
@@ -17,12 +18,12 @@ class PicturesCase extends StatefulWidget {
 
 class _PicturesCaseState extends State<PicturesCase> {
   Storage storageInstance = Storage();
+  Globals globals = Globals();
 
   @override
   Widget build(BuildContext context) {
     // Future<dynamic> picturesList =
     //     storageInstance.getPicturesFromCase(caseID: widget.caseID);
-    Globals globals = Globals();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -47,18 +48,21 @@ class _PicturesCaseState extends State<PicturesCase> {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Text('Vous pouvez ajouter 3 photos maximum'),
+        const Text('Vous pouvez ajouter 3 photos maximum'),
         IconButton(
           onPressed: () async {
-            bool isUploaded = await storageInstance.uploadImage(
+            String isUploaded = await storageInstance.uploadImage(
                 pathToStorage: 'cases/${widget.caseID}/pictures/');
-            if (isUploaded) {
-              setState(() {
-                // Update your list here
-              });
+            if (isUploaded != 'error') {
+              print('icicicici');
+              print(isUploaded);
+              DBservice addEntryDocument = DBservice();
+              addEntryDocument.addEntryCase(
+                  caseID: widget.caseID, fileNameUrl: isUploaded);
+              setState(() {});
             }
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.add_a_photo,
           ),
         )
@@ -143,6 +147,57 @@ class _PicturesCaseState extends State<PicturesCase> {
                                   image: NetworkImage(urlSnapshot.data!),
                                 ),
                               ),
+                              child: Stack(
+                                // Use a Stack to overlay the IconButton on the Container
+                                children: [
+                                  // The IconButton is placed at the top-right corner of the Container
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      color: globals.getRainbowMainColor(),
+                                      iconSize: 42,
+                                      icon: const Icon(Icons.more_horiz_sharp),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('Suppression'),
+                                              content: Text(
+                                                  'Voulez-vous supprimer cette photo ?'),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text('Annuler'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child:
+                                                      const Text('Supprimer'),
+                                                  onPressed: () async {
+                                                    await storageInstance
+                                                        .deleteFileFromUrl(
+                                                            urlSnapshot.data!);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                PicturesCase(
+                                                                    caseID: widget
+                                                                        .caseID)));
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                             );
                           }
                         },
@@ -159,159 +214,4 @@ class _PicturesCaseState extends State<PicturesCase> {
       },
     );
   }
-
-  // streamMethod() {
-  //   return StreamBuilder(
-  //     stream: picturesList.asStream(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.data != null) {
-  //         if (snapshot.data.length == 3) {
-  //           return ListView.separated(
-  //             shrinkWrap: true,
-  //             itemCount: snapshot.data.length,
-  //             itemBuilder: (context, index) {
-  //               return Expanded(
-  //                 child: Container(
-  //                   width: 50,
-  //                   height: 500,
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                     image: DecorationImage(
-  //                       fit: BoxFit.cover,
-  //                       image: NetworkImage(snapshot.data[index]),
-  //                     ),
-  //                   ),
-  //                   child: Stack(
-  //                     // Use a Stack to overlay the IconButton on the Container
-  //                     children: [
-  //                       // The IconButton is placed at the top-right corner of the Container
-  //                       Positioned(
-  //                         top: 0,
-  //                         right: 0,
-  //                         child: IconButton(
-  //                           color: globals.getRainbowMainColor(),
-  //                           iconSize: 42,
-  //                           icon: const Icon(Icons.more_horiz_sharp),
-  //                           onPressed: () {
-  //                             showDialog(
-  //                               context: context,
-  //                               builder: (BuildContext context) {
-  //                                 return AlertDialog(
-  //                                   title: Text('Suppression'),
-  //                                   content: Text(
-  //                                       'Voulez-vous supprimer cette photo ?'),
-  //                                   actions: [
-  //                                     TextButton(
-  //                                       child: const Text('Annuler'),
-  //                                       onPressed: () {
-  //                                         Navigator.of(context).pop();
-  //                                       },
-  //                                     ),
-  //                                     TextButton(
-  //                                       child: const Text('Supprimer'),
-  //                                       onPressed: () {
-  //                                         Navigator.push(
-  //                                             context,
-  //                                             MaterialPageRoute(
-  //                                                 builder: (context) =>
-  //                                                     PicturesCase(
-  //                                                         caseID:
-  //                                                             widget.caseID)));
-  //                                       },
-  //                                     )
-  //                                   ],
-  //                                 );
-  //                               },
-  //                             );
-  //                           },
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //             separatorBuilder: (context, index) {
-  //               return const SizedBox(height: 30);
-  //             },
-  //           );
-  //         } else {
-  //           return Expanded(
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.max,
-  //               children: [
-  //                 addPhoto(),
-  //                 ListView.separated(
-  //                   shrinkWrap: true,
-  //                   itemCount: snapshot.data.length,
-  //                   itemBuilder: (context, index) {
-  //                     return Container(
-  //                       width: 50,
-  //                       height: 500,
-  //                       decoration: BoxDecoration(
-  //                         borderRadius: BorderRadius.circular(10),
-  //                         image: DecorationImage(
-  //                           fit: BoxFit.cover,
-  //                           image: NetworkImage(snapshot.data[index]),
-  //                         ),
-  //                       ),
-  //                       child: Stack(
-  //                         children: [
-  //                           Positioned(
-  //                             top: 0,
-  //                             right: 0,
-  //                             child: IconButton(
-  //                               color: globals.getRainbowMainColor(),
-  //                               iconSize: 42,
-  //                               icon: const Icon(Icons.more_horiz_sharp),
-  //                               onPressed: () {
-  //                                 showDialog(
-  //                                   context: context,
-  //                                   builder: (BuildContext context) {
-  //                                     return AlertDialog(
-  //                                       title: Text('Suppression'),
-  //                                       content: Text(
-  //                                           'Voulez-vous supprimer cette photo ?'),
-  //                                       actions: [
-  //                                         TextButton(
-  //                                           child: const Text('Annuler'),
-  //                                           onPressed: () {
-  //                                             Navigator.of(context).pop();
-  //                                           },
-  //                                         ),
-  //                                         TextButton(
-  //                                           child: const Text('Supprimer'),
-  //                                           onPressed: () async {
-  //                                             await storageInstance
-  //                                                 .deleteFileFromUrl(
-  //                                                     snapshot.data[index]);
-  //                                             setState(() {});
-  //                                             Navigator.pop(context);
-  //                                           },
-  //                                         )
-  //                                       ],
-  //                                     );
-  //                                   },
-  //                                 );
-  //                               },
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     );
-  //                   },
-  //                   separatorBuilder: (context, index) {
-  //                     return const SizedBox(height: 30);
-  //                   },
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         }
-  //       } else {
-  //         return Text('hello');
-  //       }
-  //     },
-  //   );
-  // }
 }
