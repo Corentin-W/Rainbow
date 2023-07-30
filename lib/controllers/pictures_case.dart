@@ -139,8 +139,8 @@ class _PicturesCaseState extends State<PicturesCase> {
                             return Text('Error loading image');
                           } else {
                             return Container(
-                              width: 400, // Adjust the width as needed
-                              height: 400, // Adjust the height as needed
+                              width: 300, // Adjust the width as needed
+                              height: 200, // Adjust the height as needed
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
