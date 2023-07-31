@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nouga/controllers/home.dart';
 import 'package:nouga/globals/globals.dart';
 import 'package:nouga/services/user_service.dart';
@@ -47,7 +48,10 @@ class _BoardingState extends State<Boarding> {
               }
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: LoadingAnimationWidget.inkDrop(
+                color: Colors.black,
+                size: 200,
+              );,
               );
             }
           }),

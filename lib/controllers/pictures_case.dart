@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nouga/services/db_service.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
@@ -95,7 +96,10 @@ class _PicturesCaseState extends State<PicturesCase> {
                           AsyncSnapshot<String> urlSnapshot) {
                         if (urlSnapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return CircularProgressIndicator();
+                          return LoadingAnimationWidget.inkDrop(
+                            color: Colors.black,
+                            size: 200,
+                          );
                         } else if (urlSnapshot.hasError) {
                           return Text('Error loading image');
                         } else {
@@ -171,7 +175,10 @@ class _PicturesCaseState extends State<PicturesCase> {
             ),
           );
         } else {
-          return CircularProgressIndicator();
+          return LoadingAnimationWidget.inkDrop(
+            color: Colors.black,
+            size: 200,
+          );
         }
       },
     );

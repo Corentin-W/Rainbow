@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nouga/controllers/home_case.dart';
 import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/warning.dart';
@@ -68,7 +69,10 @@ class _HomeState extends State<Home> {
             FirebaseFirestore.instance.collection('cases').limit(6).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return const LoadingAnimationWidget.inkDrop(
+                color: Colors.black,
+                size: 200,
+              );
           }
 
           return Expanded(

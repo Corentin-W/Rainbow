@@ -11,6 +11,7 @@ import '../services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class HomeCase extends StatefulWidget {
   String id;
@@ -154,8 +155,24 @@ class _HomeCaseState extends State<HomeCase> {
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             elevation: 3,
             onPressed: () async {
+              var loadingAnimation = LoadingAnimationWidget.inkDrop(
+                color: Colors.black,
+                size: 200,
+              );
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: loadingAnimation,
+                  );
+                },
+              );
               Storage storageInstance = Storage();
-              await storageInstance.deleteFileFromUrl(caseID: widget.id, downloadUrl:caseInfos.data['photos']);
+              if (caseInfos.data['photos'] != null) {
+                await storageInstance.deleteFileFromUrl(
+                    caseID: widget.id, downloadUrl: caseInfos.data['photos']);
+              }
+
               String isUploaded = await storageInstance.uploadImage(
                   pathToStorage: 'cases/${widget.id}/pictures/');
               if (isUploaded != 'error') {
