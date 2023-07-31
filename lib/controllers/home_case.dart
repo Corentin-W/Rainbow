@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:nouga/controllers/pictures_case.dart';
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
+import '../models/storage/storage.dart';
+import '../services/db_service.dart';
 import '../services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeCase extends StatefulWidget {
   String id;
@@ -41,7 +44,6 @@ class _HomeCaseState extends State<HomeCase> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -85,7 +87,7 @@ class _HomeCaseState extends State<HomeCase> {
       const SizedBox(height: 5),
       sousPartie(infosCases: infosCase),
       const SizedBox(height: 20),
-      carouselWidget(infosCases: infosCase),
+      photoWidget(infosCases: infosCase),
       const SizedBox(height: 20),
       actionsButtons(caseInfos: infosCase),
       const SizedBox(height: 20),
@@ -136,67 +138,6 @@ class _HomeCaseState extends State<HomeCase> {
     );
   }
 
-  carouselWidget({required infosCases}) {
-    return Column(
-      children: [
-        CarouselSlider(
-          items: imageSliders,
-          carouselController: widget._controller,
-          options: CarouselOptions(
-              autoPlay: false,
-              enlargeCenterPage: true,
-              aspectRatio: 1,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  widget._current = index;
-                });
-              }),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: imgList.asMap().entries.map((entry) {
-            return GestureDetector(
-              onTap: () => widget._controller.animateToPage(entry.key),
-              child: Container(
-                  width: 12,
-                  height: 12,
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 4.0),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: (Theme.of(context).brightness == Brightness.dark
-                              ? const Color.fromARGB(255, 0, 0, 0)
-                              : const Color.fromARGB(175, 255, 239, 8))
-                          .withOpacity(
-                              widget._current == entry.key ? 0.9 : 0.4))),
-            );
-          }).toList(),
-        )
-      ],
-    );
-  }
-
-  final List<String> imgList = [
-    'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
-    'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
-    'https://hips.hearstapps.com/hmg-prod/images/best-summer-instagram-captions-1619209703.jpg',
-  ];
-
-  late final List<Widget> imageSliders = imgList
-      .map((item) => Container(
-            child: Container(
-              margin: const EdgeInsets.all(1.0),
-              child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  child: Stack(
-                    children: <Widget>[
-                      Image.network(item, fit: BoxFit.cover, width: 1000.0),
-                    ],
-                  )),
-            ),
-          ))
-      .toList();
-
   actionsButtons({required caseInfos}) {
     String userOwnerCase = "";
     if (caseInfos.data['user_email'] != null) {
@@ -211,13 +152,18 @@ class _HomeCaseState extends State<HomeCase> {
             heroTag: 'pictures',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             elevation: 3,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PicturesCase(
-                            caseID: widget.id,
-                          )));
+            onPressed: () async {
+              Storage storageInstance = Storage();
+              String isUploaded = await storageInstance.uploadImage(
+                  pathToStorage: 'cases/${widget.id}/pictures/');
+              if (isUploaded != 'error') {
+                print('icicicici');
+                print(isUploaded);
+                DBservice addEntryDocument = DBservice();
+                addEntryDocument.addEntryCase(
+                    caseID: widget.id, fileNameUrl: isUploaded);
+                setState(() {});
+              }
             },
             child: const Icon(Icons.photo_camera),
           ),
@@ -227,8 +173,7 @@ class _HomeCaseState extends State<HomeCase> {
           heroTag: 'messages',
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
-          onPressed: () {
-          },
+          onPressed: () {},
           child: const Icon(Icons.message),
         ),
         const SizedBox(width: 10),
@@ -236,8 +181,7 @@ class _HomeCaseState extends State<HomeCase> {
           heroTag: 'favorite',
           backgroundColor: const Color.fromARGB(175, 255, 239, 8),
           elevation: 3,
-          onPressed: () {
-          },
+          onPressed: () {},
           child: const Icon(Icons.favorite),
         )
       ],
@@ -262,4 +206,89 @@ class _HomeCaseState extends State<HomeCase> {
         size: 12,
         weight: FontWeight.w400);
   }
+
+  photoWidget({required infosCases}) {
+    if (infosCases.data!['photos'] != null) {
+      return Container(
+        height: 300,
+        width: 300,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(infosCases.data!['photos']),
+                fit: BoxFit.contain)),
+      );
+    } else {
+      return Container(
+        height: 300,
+        width: 300,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(dotenv.env['DEFAULT_PATH_IMAGE']!),
+                fit: BoxFit.contain)),
+      );
+    }
+  }
 }
+
+
+
+  // carouselWidget({required infosCases}) {
+  //   return Column(
+  //     children: [
+  //       CarouselSlider(
+  //         items: imageSliders,
+  //         carouselController: widget._controller,
+  //         options: CarouselOptions(
+  //             autoPlay: false,
+  //             enlargeCenterPage: true,
+  //             aspectRatio: 1,
+  //             onPageChanged: (index, reason) {
+  //               setState(() {
+  //                 widget._current = index;
+  //               });
+  //             }),
+  //       ),
+  //       Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: imgList.asMap().entries.map((entry) {
+  //           return GestureDetector(
+  //             onTap: () => widget._controller.animateToPage(entry.key),
+  //             child: Container(
+  //                 width: 12,
+  //                 height: 12,
+  //                 margin: const EdgeInsets.symmetric(
+  //                     vertical: 8.0, horizontal: 4.0),
+  //                 decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     color: (Theme.of(context).brightness == Brightness.dark
+  //                             ? const Color.fromARGB(255, 0, 0, 0)
+  //                             : const Color.fromARGB(175, 255, 239, 8))
+  //                         .withOpacity(
+  //                             widget._current == entry.key ? 0.9 : 0.4))),
+  //           );
+  //         }).toList(),
+  //       )
+  //     ],
+  //   );
+  // }
+
+    // final List<String> imgList = [
+  //   'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
+  //   'https://hips.hearstapps.com/hmg-prod/images/summer-instagram-captions-1648142279.png',
+  //   'https://hips.hearstapps.com/hmg-prod/images/best-summer-instagram-captions-1619209703.jpg',
+  // ];
+
+  // late final List<Widget> imageSliders = imgList
+  //     .map((item) => Container(
+  //           child: Container(
+  //             margin: const EdgeInsets.all(1.0),
+  //             child: ClipRRect(
+  //                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+  //                 child: Stack(
+  //                   children: <Widget>[
+  //                     Image.network(item, fit: BoxFit.cover, width: 1000.0),
+  //                   ],
+  //                 )),
+  //           ),
+  //         ))
+  //     .toList();

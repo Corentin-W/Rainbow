@@ -5,6 +5,7 @@ import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
 import '../globals/drawer.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -82,6 +83,12 @@ class _HomeState extends State<Home> {
                 int days = difference.inDays;
                 int hours = difference.inHours % 24;
                 int minutes = difference.inMinutes % 60;
+                String? pathImage = '';
+                if (doc.data()['photos'] != null) {
+                  pathImage = doc.data()['photos'];
+                } else {
+                  pathImage = dotenv.env['DEFAULT_PATH_IMAGE'];
+                }
                 return Card(
                   elevation: 5,
                   child: InkWell(
@@ -95,10 +102,9 @@ class _HomeState extends State<Home> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  'https://www.missnumerique.com/blog/wp-content/uploads/reussir-sa-photo-de-profil-michael-dam.jpg'))),
+                              image: NetworkImage(pathImage!))),
                       width: 270,
                       height: 320,
                       child: ListTile(
