@@ -79,135 +79,97 @@ class _PicturesCaseState extends State<PicturesCase> {
           .asStream(),
       builder: (BuildContext context, AsyncSnapshot<ListResult> snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data!.items.length >= 3) {
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: snapshot.data!.items.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Reference ref = snapshot.data!.items[index];
-                return FutureBuilder(
-                  future: ref.getDownloadURL(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<String> urlSnapshot) {
-                    if (urlSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (urlSnapshot.hasError) {
-                      return Text('Error loading image');
-                    } else {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 5,
-                        child: Container(
-                          width: 200, // Adjust the width as needed
-                          height: 200, // Adjust the height as needed
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(urlSnapshot.data!),
+          // If there are less than 3 images
+          return Expanded(
+            child: Column(
+              children: [
+                if (snapshot.data!.items.length == 0) ...[addPhoto()],
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Reference ref = snapshot.data!.items[index];
+                    return FutureBuilder(
+                      future: ref.getDownloadURL(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> urlSnapshot) {
+                        if (urlSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (urlSnapshot.hasError) {
+                          return Text('Error loading image');
+                        } else {
+                          return Container(
+                            width: 150, // Adjust the width as needed
+                            height: 300, // Adjust the height as needed
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(urlSnapshot.data!),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                );
-              },
-            );
-          } else {
-            // If there are less than 3 images
-            return Expanded(
-              child: Column(
-                children: [
-                  addPhoto(),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Reference ref = snapshot.data!.items[index];
-                      return FutureBuilder(
-                        future: ref.getDownloadURL(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> urlSnapshot) {
-                          if (urlSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          } else if (urlSnapshot.hasError) {
-                            return Text('Error loading image');
-                          } else {
-                            return Container(
-                              width: 300, // Adjust the width as needed
-                              height: 200, // Adjust the height as needed
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(urlSnapshot.data!),
-                                ),
-                              ),
-                              child: Stack(
-                                // Use a Stack to overlay the IconButton on the Container
-                                children: [
-                                  // The IconButton is placed at the top-right corner of the Container
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: IconButton(
-                                      color: globals.getRainbowMainColor(),
-                                      iconSize: 42,
-                                      icon: const Icon(Icons.more_horiz_sharp),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text('Suppression'),
-                                              content: Text(
-                                                  'Voulez-vous supprimer cette photo ?'),
-                                              actions: [
-                                                TextButton(
-                                                  child: const Text('Annuler'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                TextButton(
-                                                  child:
-                                                      const Text('Supprimer'),
-                                                  onPressed: () async {
-                                                    await storageInstance
-                                                        .deleteFileFromUrl(
-                                                            urlSnapshot.data!);
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                PicturesCase(
-                                                                    caseID: widget
-                                                                        .caseID)));
-                                                  },
-                                                )
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
+                            child: Stack(
+                              // Use a Stack to overlay the IconButton on the Container
+                              children: [
+                                // The IconButton is placed at the top-right corner of the Container
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    color: globals.getRainbowMainColor(),
+                                    iconSize: 42,
+                                    icon: const Icon(Icons.more_horiz_sharp),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Suppression'),
+                                            content: const Text(
+                                                'Voulez-vous supprimer cette photo ?'),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text('Annuler'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: const Text('Supprimer'),
+                                                onPressed: () async {
+                                                  await storageInstance
+                                                      .deleteFileFromUrl(
+                                                          downloadUrl:
+                                                              urlSnapshot.data!,
+                                                          caseID:
+                                                              widget.caseID);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PicturesCase(
+                                                                  caseID: widget
+                                                                      .caseID)));
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
                                   ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          }
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
         } else {
           return CircularProgressIndicator();
         }

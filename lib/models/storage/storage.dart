@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +21,8 @@ class Storage {
     return returnList;
   }
 
-  Future<void> deleteFileFromUrl(String downloadUrl) async {
+  Future<void> deleteFileFromUrl(
+      {required String downloadUrl, required String caseID}) async {
     FirebaseStorage storage = FirebaseStorage.instance;
     // Crée une instance de FirebaseStorage pour interagir avec le stockage Firebase.
 
@@ -31,7 +33,18 @@ class Storage {
 
     // Appeler la fonction pour supprimer le fichier
     await ref.delete();
-    // Utilise la méthode delete() sur la référence pour supprimer le fichier correspondant
+    print('demarre');
+    print(downloadUrl);
+    print(caseID);
+
+    final DocumentReference docRef =
+        FirebaseFirestore.instance.collection('cases').doc(caseID);
+
+    docRef.update({'photos.$downloadUrl': FieldValue.delete()}).then((_) {
+      print("Champ supprimé avec succès");
+    }).catchError((error) {
+      print("Erreur lors de la suppression du champ : $error");
+    });
   }
 
   uploadImage({required pathToStorage}) async {
@@ -51,7 +64,7 @@ class Storage {
 
       // Create a reference to "mountains.jpg"
       final mountainsRef = storageRef.child(pathToStorage + fileName);
-print('1');
+      print('1');
       try {
         print('2');
         await mountainsRef.putFile(selectedImage);
