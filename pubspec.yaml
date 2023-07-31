@@ -55,6 +55,8 @@ dependencies:
   firebase_storage: ^11.2.5
   image_picker: ^1.0.1
   path: ^1.8.3
+  photo_view: ^0.14.0
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:

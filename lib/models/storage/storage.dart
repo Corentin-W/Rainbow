@@ -33,18 +33,6 @@ class Storage {
 
     // Appeler la fonction pour supprimer le fichier
     await ref.delete();
-    print('demarre');
-    print(downloadUrl);
-    print(caseID);
-
-    final DocumentReference docRef =
-        FirebaseFirestore.instance.collection('cases').doc(caseID);
-
-    docRef.update({'photos.$downloadUrl': FieldValue.delete()}).then((_) {
-      print("Champ supprimé avec succès");
-    }).catchError((error) {
-      print("Erreur lors de la suppression du champ : $error");
-    });
   }
 
   uploadImage({required pathToStorage}) async {

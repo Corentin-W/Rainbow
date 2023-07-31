@@ -10,6 +10,7 @@ import '../services/db_service.dart';
 import '../services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:photo_view/photo_view.dart';
 
 class HomeCase extends StatefulWidget {
   String id;
@@ -154,6 +155,7 @@ class _HomeCaseState extends State<HomeCase> {
             elevation: 3,
             onPressed: () async {
               Storage storageInstance = Storage();
+              await storageInstance.deleteFileFromUrl(caseID: widget.id, downloadUrl:caseInfos.data['photos']);
               String isUploaded = await storageInstance.uploadImage(
                   pathToStorage: 'cases/${widget.id}/pictures/');
               if (isUploaded != 'error') {
@@ -209,13 +211,16 @@ class _HomeCaseState extends State<HomeCase> {
 
   photoWidget({required infosCases}) {
     if (infosCases.data!['photos'] != null) {
-      return Container(
+      return SizedBox(
         height: 300,
         width: 300,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(infosCases.data!['photos']),
-                fit: BoxFit.contain)),
+        child: PhotoView(
+          imageProvider: NetworkImage(infosCases.data!['photos']),
+          minScale: PhotoViewComputedScale.contained * 1,
+          maxScale: PhotoViewComputedScale.covered * 2,
+          initialScale: PhotoViewComputedScale.contained,
+          backgroundDecoration: BoxDecoration(color: Colors.transparent),
+        ),
       );
     } else {
       return Container(
