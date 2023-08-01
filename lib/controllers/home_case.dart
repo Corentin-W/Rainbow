@@ -145,66 +145,145 @@ class _HomeCaseState extends State<HomeCase> {
     if (caseInfos.data['user_email'] != null) {
       userOwnerCase = caseInfos.data['user_email'];
     }
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        if (userOwnerCase == userEMAIL) ...[
-          FloatingActionButton.small(
-            heroTag: 'pictures',
-            backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-            elevation: 3,
-            onPressed: () async {
-              var loadingAnimation = LoadingAnimationWidget.inkDrop(
-                color: Colors.black,
-                size: 200,
-              );
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: loadingAnimation,
-                  );
-                },
-              );
-              Storage storageInstance = Storage();
-              if (caseInfos.data['photos'] != null) {
-                await storageInstance.deleteFileFromUrl(
-                    caseID: widget.id, downloadUrl: caseInfos.data['photos']);
-              }
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (userOwnerCase == userEMAIL) ...[
+              if (caseInfos.data['photos'] != null) ...[
+                FloatingActionButton.small(
+                  heroTag: 'pictures',
+                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                  elevation: 3,
+                  onPressed: () async {
+                    var loadingAnimation = LoadingAnimationWidget.inkDrop(
+                      color: Color.fromARGB(255, 24, 21, 197),
+                      size: 100,
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: loadingAnimation,
+                        );
+                      },
+                    );
+                    Storage storageInstance = Storage();
+                    if (caseInfos.data['photos'] != null) {
+                      await storageInstance.deleteFileFromUrl(
+                          caseID: widget.id,
+                          downloadUrl: caseInfos.data['photos']);
+                    }
 
-              String? isUploaded = await storageInstance.uploadImage(
-                  pathToStorage: 'cases/${widget.id}/pictures/');
-              if (isUploaded != 'error') {
-                DBservice addEntryDocument = DBservice();
-                if (isUploaded != null) {
-                  addEntryDocument.addEntryCase(
-                      caseID: widget.id, fileNameUrl: isUploaded);
-                }
-                setState(() {});
-                Navigator.of(context).pop();
-              } else {
-                Navigator.of(context).pop();
-              }
-            },
-            child: const Icon(Icons.photo_camera),
-          ),
-          const SizedBox(width: 10),
-        ],
-        FloatingActionButton.small(
-          heroTag: 'messages',
-          backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-          elevation: 3,
-          onPressed: () {},
-          child: const Icon(Icons.message),
+                    String? isUploaded = await storageInstance.uploadImage(
+                        pathToStorage: 'cases/${widget.id}/pictures/');
+                    if (isUploaded != 'error') {
+                      DBservice addEntryDocument = DBservice();
+                      if (isUploaded != null) {
+                        addEntryDocument.addEntryCase(
+                            caseID: widget.id, fileNameUrl: isUploaded);
+                      }
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Icon(Icons.photo_camera),
+                )
+              ] else ...[
+                FloatingActionButton.small(
+                  heroTag: 'pictures',
+                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                  elevation: 3,
+                  onPressed: () async {
+                    var loadingAnimation = LoadingAnimationWidget.inkDrop(
+                      color: Color.fromARGB(255, 24, 21, 197),
+                      size: 100,
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: loadingAnimation,
+                        );
+                      },
+                    );
+                    Storage storageInstance = Storage();
+                    if (caseInfos.data['photos'] != null) {
+                      await storageInstance.deleteFileFromUrl(
+                          caseID: widget.id,
+                          downloadUrl: caseInfos.data['photos']);
+                    }
+
+                    String? isUploaded = await storageInstance.uploadImage(
+                        pathToStorage: 'cases/${widget.id}/pictures/');
+                    if (isUploaded != 'error') {
+                      DBservice addEntryDocument = DBservice();
+                      if (isUploaded != null) {
+                        addEntryDocument.addEntryCase(
+                            caseID: widget.id, fileNameUrl: isUploaded);
+                      }
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Icon(Icons.delete_outline),
+                )
+              ],
+            ],
+            SizedBox(width: 10),
+            widget.globals.textWithRainbowPolice(
+                align: TextAlign.end,
+                size: 15,
+                weight: FontWeight.w600,
+                color: Colors.black,
+                textData: 'Supprimer la photo')
+          ],
         ),
-        const SizedBox(width: 10),
-        FloatingActionButton.small(
-          heroTag: 'favorite',
-          backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-          elevation: 3,
-          onPressed: () {},
-          child: const Icon(Icons.favorite),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton.small(
+              heroTag: 'messages',
+              backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+              elevation: 3,
+              onPressed: () {},
+              child: const Icon(Icons.message),
+            ),
+            const SizedBox(width: 10),
+            widget.globals.textWithRainbowPolice(
+                align: TextAlign.end,
+                size: 15,
+                weight: FontWeight.w600,
+                color: Colors.black,
+                textData: 'Acceder aux messages de ce case')
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton.small(
+              heroTag: 'favorite',
+              backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+              elevation: 3,
+              onPressed: () {},
+              child: const Icon(Icons.favorite),
+            ),
+            SizedBox(width: 10),
+            widget.globals.textWithRainbowPolice(
+                align: TextAlign.end,
+                size: 15,
+                weight: FontWeight.w600,
+                color: Colors.black,
+                textData: 'Ajouter à vos cases enregistrés')
+          ],
         )
       ],
     );

@@ -87,12 +87,14 @@ class _HomeState extends State<Home> {
                 int days = difference.inDays;
                 int hours = difference.inHours % 24;
                 int minutes = difference.inMinutes % 60;
-                String? pathImage = '';
+                String pathImage = '';
                 if (doc.data()['photos'] != null) {
                   pathImage = doc.data()['photos'];
                 } else {
-                  pathImage = dotenv.env['DEFAULT_PATH_IMAGE'];
+                  pathImage = dotenv.env['DEFAULT_PATH_IMAGE']!;
                 }
+                print('pathImage');
+                print(pathImage);
                 return Card(
                   elevation: 5,
                   child: InkWell(
@@ -108,7 +110,7 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(pathImage!),
+                            image: NetworkImage(pathImage),
                             onError: (exception, stackTrace) {
                               NetworkImage(dotenv.env['DEFAULT_PATH_IMAGE']!);
                             },
