@@ -23,6 +23,10 @@ class Storage {
 
   Future<void> deleteFileFromUrl(
       {required String downloadUrl, required String caseID}) async {
+    // Je commence par supprimer en bdd la valeur phot
+    final fireInstance = await FirebaseFirestore.instance.collection('cases');
+    final update = <String, dynamic>{'photos': FieldValue.delete()};
+
     FirebaseStorage storage = FirebaseStorage.instance;
     // Crée une instance de FirebaseStorage pour interagir avec le stockage Firebase.
 

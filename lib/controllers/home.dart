@@ -69,10 +69,10 @@ class _HomeState extends State<Home> {
             FirebaseFirestore.instance.collection('cases').limit(6).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const LoadingAnimationWidget.inkDrop(
-                color: Colors.black,
-                size: 200,
-              );
+            return LoadingAnimationWidget.inkDrop(
+              color: Colors.black,
+              size: 200,
+            );
           }
 
           return Expanded(
@@ -107,8 +107,12 @@ class _HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(pathImage!))),
+                            fit: BoxFit.cover,
+                            image: NetworkImage(pathImage!),
+                            onError: (exception, stackTrace) {
+                              NetworkImage(dotenv.env['DEFAULT_PATH_IMAGE']!);
+                            },
+                          )),
                       width: 270,
                       height: 320,
                       child: ListTile(

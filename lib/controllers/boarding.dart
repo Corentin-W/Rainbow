@@ -47,11 +47,11 @@ class _BoardingState extends State<Boarding> {
                 return const Home();
               }
             } else {
-              return const Center(
+              return  Center(
                 child: LoadingAnimationWidget.inkDrop(
                 color: Colors.black,
                 size: 200,
-              );,
+              ),
               );
             }
           }),

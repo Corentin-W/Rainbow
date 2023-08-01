@@ -173,15 +173,18 @@ class _HomeCaseState extends State<HomeCase> {
                     caseID: widget.id, downloadUrl: caseInfos.data['photos']);
               }
 
-              String isUploaded = await storageInstance.uploadImage(
+              String? isUploaded = await storageInstance.uploadImage(
                   pathToStorage: 'cases/${widget.id}/pictures/');
               if (isUploaded != 'error') {
-                print('icicicici');
-                print(isUploaded);
                 DBservice addEntryDocument = DBservice();
-                addEntryDocument.addEntryCase(
-                    caseID: widget.id, fileNameUrl: isUploaded);
+                if (isUploaded != null) {
+                  addEntryDocument.addEntryCase(
+                      caseID: widget.id, fileNameUrl: isUploaded);
+                }
                 setState(() {});
+                Navigator.of(context).pop();
+              } else {
+                Navigator.of(context).pop();
               }
             },
             child: const Icon(Icons.photo_camera),
