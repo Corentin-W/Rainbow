@@ -93,8 +93,6 @@ class _HomeState extends State<Home> {
                 } else {
                   pathImage = dotenv.env['DEFAULT_PATH_IMAGE']!;
                 }
-                print('pathImage');
-                print(pathImage);
                 return Card(
                   elevation: 5,
                   child: InkWell(
@@ -241,7 +239,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         const SizedBox(height: 5),
-        const Text('Chercher un case')
+        const Text('Cases suivis')
       ],
     );
   }
@@ -260,7 +258,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         const SizedBox(height: 5),
-        const Text('Chercher un case')
+        const Text('Parametres')
       ],
     );
   }

@@ -222,9 +222,9 @@ class _HomeCaseState extends State<HomeCase> {
                       await storageInstance.deleteFileFromUrl(
                           caseID: widget.id,
                           downloadUrl: caseInfos.data['photos']);
-                          setState(() {});
+                      setState(() {});
                     }
-                    
+
                     // String? isUploaded = await storageInstance.uploadImage(
                     //     pathToStorage: 'cases/${widget.id}/pictures/');
                     // if (isUploaded != 'error') {
@@ -279,8 +279,12 @@ class _HomeCaseState extends State<HomeCase> {
               heroTag: 'favorite',
               backgroundColor: const Color.fromARGB(175, 255, 239, 8),
               elevation: 3,
-              onPressed: () {},
-              child: const Icon(Icons.favorite),
+              onPressed: () async {
+                DBservice dbINSTANCE = DBservice();
+                dbINSTANCE.addToFavorite(
+                    userEMAIL: userEMAIL, caseID: widget.id);
+              },
+              child: const Icon(Icons.favorite_border),
             ),
             SizedBox(width: 10),
             widget.globals.textWithRainbowPolice(
