@@ -23,23 +23,12 @@ class Storage {
 
   Future<void> deleteFileFromUrl(
       {required String downloadUrl, required String caseID}) async {
-    // Je commence par supprimer en bdd la valeur phot
     final fireInstance =
         FirebaseFirestore.instance.collection('cases').doc(caseID);
     final update = <String, dynamic>{'photos': FieldValue.delete()};
-
+    fireInstance.update(update);
     FirebaseStorage storage = FirebaseStorage.instance;
-    // Crée une instance de FirebaseStorage pour interagir avec le stockage Firebase.
-
-    // Convertir l'URL de téléchargement en une référence de stockage
     Reference ref = storage.refFromURL(downloadUrl);
-    print('larefref');
-    print(ref);
-    
-    // Utilise la méthode refFromURL() pour obtenir la référence du fichier dans le stockage Firebase
-    // à partir de l'URL de téléchargement que vous avez fournie.
-
-    // Appeler la fonction pour supprimer le fichier
     await ref.delete();
   }
 

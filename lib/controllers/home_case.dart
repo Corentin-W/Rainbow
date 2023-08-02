@@ -145,6 +145,7 @@ class _HomeCaseState extends State<HomeCase> {
     if (caseInfos.data['user_email'] != null) {
       userOwnerCase = caseInfos.data['user_email'];
     }
+    print(caseInfos.data['photos']);
     return Column(
       children: [
         Row(
@@ -152,7 +153,7 @@ class _HomeCaseState extends State<HomeCase> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (userOwnerCase == userEMAIL) ...[
-              if (caseInfos.data['photos'] != null) ...[
+              if (caseInfos.data['photos'] == null) ...[
                 FloatingActionButton.small(
                   heroTag: 'pictures',
                   backgroundColor: const Color.fromARGB(175, 255, 239, 8),
@@ -171,17 +172,15 @@ class _HomeCaseState extends State<HomeCase> {
                       },
                     );
                     Storage storageInstance = Storage();
-                    if (caseInfos.data['photos'] != null) {
-                      await storageInstance.deleteFileFromUrl(
-                          caseID: widget.id,
-                          downloadUrl: caseInfos.data['photos']);
-                    }
 
                     String? isUploaded = await storageInstance.uploadImage(
                         pathToStorage: 'cases/${widget.id}/pictures/');
                     if (isUploaded != 'error') {
                       DBservice addEntryDocument = DBservice();
                       if (isUploaded != null) {
+                        // await storageInstance.deleteFileFromUrl(
+                        //     caseID: widget.id,
+                        //     downloadUrl: caseInfos.data['photos']);
                         addEntryDocument.addEntryCase(
                             caseID: widget.id, fileNameUrl: isUploaded);
                       }
@@ -192,10 +191,17 @@ class _HomeCaseState extends State<HomeCase> {
                     }
                   },
                   child: const Icon(Icons.photo_camera),
-                )
+                ),
+                SizedBox(width: 10),
+                widget.globals.textWithRainbowPolice(
+                    align: TextAlign.end,
+                    size: 15,
+                    weight: FontWeight.w600,
+                    color: Colors.black,
+                    textData: 'Ajouter une photo')
               ] else ...[
                 FloatingActionButton.small(
-                  heroTag: 'pictures',
+                  heroTag: 'picture',
                   backgroundColor: const Color.fromARGB(175, 255, 239, 8),
                   elevation: 3,
                   onPressed: () async {
@@ -203,46 +209,46 @@ class _HomeCaseState extends State<HomeCase> {
                       color: Color.fromARGB(255, 24, 21, 197),
                       size: 100,
                     );
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: loadingAnimation,
-                        );
-                      },
-                    );
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (BuildContext context) {
+                    //     return AlertDialog(
+                    //       content: loadingAnimation,
+                    //     );
+                    //   },
+                    // );
                     Storage storageInstance = Storage();
                     if (caseInfos.data['photos'] != null) {
                       await storageInstance.deleteFileFromUrl(
                           caseID: widget.id,
                           downloadUrl: caseInfos.data['photos']);
+                          setState(() {});
                     }
-
-                    String? isUploaded = await storageInstance.uploadImage(
-                        pathToStorage: 'cases/${widget.id}/pictures/');
-                    if (isUploaded != 'error') {
-                      DBservice addEntryDocument = DBservice();
-                      if (isUploaded != null) {
-                        addEntryDocument.addEntryCase(
-                            caseID: widget.id, fileNameUrl: isUploaded);
-                      }
-                      setState(() {});
-                      Navigator.of(context).pop();
-                    } else {
-                      Navigator.of(context).pop();
-                    }
+                    
+                    // String? isUploaded = await storageInstance.uploadImage(
+                    //     pathToStorage: 'cases/${widget.id}/pictures/');
+                    // if (isUploaded != 'error') {
+                    //   DBservice addEntryDocument = DBservice();
+                    //   if (isUploaded != null) {
+                    //     addEntryDocument.addEntryCase(
+                    //         caseID: widget.id, fileNameUrl: isUploaded);
+                    //   }
+                    //   Navigator.of(context).pop();
+                    // } else {
+                    //   Navigator.of(context).pop();
+                    // }
                   },
                   child: const Icon(Icons.delete_outline),
-                )
+                ),
+                SizedBox(width: 10),
+                widget.globals.textWithRainbowPolice(
+                    align: TextAlign.end,
+                    size: 15,
+                    weight: FontWeight.w600,
+                    color: Colors.black,
+                    textData: 'Supprimer la photo')
               ],
             ],
-            SizedBox(width: 10),
-            widget.globals.textWithRainbowPolice(
-                align: TextAlign.end,
-                size: 15,
-                weight: FontWeight.w600,
-                color: Colors.black,
-                textData: 'Supprimer la photo')
           ],
         ),
         Row(
