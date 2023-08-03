@@ -13,8 +13,11 @@ class DBservice {
     var result = userDocRef.set(datas);
   }
 
-  removeFromFavorite({required String userEMAIL, required String caseID})async {
+  removeFromFavorite(
+      {required String userEMAIL, required String caseID}) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     var userDocRef = db.collection('favorites').doc(userEMAIL);
+    final updateFavorite = <String, dynamic>{caseID: FieldValue.delete()};
+    userDocRef.update(updateFavorite);
   }
 }

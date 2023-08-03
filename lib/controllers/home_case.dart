@@ -288,8 +288,9 @@ class _HomeCaseState extends State<HomeCase> {
                 elevation: 3,
                 onPressed: () async {
                   DBservice dbINSTANCE = DBservice();
-                  dbINSTANCE.removeFromFavorite(
+                  await dbINSTANCE.removeFromFavorite(
                       userEMAIL: userEMAIL, caseID: widget.id);
+                  setState(() {});
                 },
                 child: const Icon(Icons.favorite),
               ),
@@ -307,8 +308,9 @@ class _HomeCaseState extends State<HomeCase> {
                 elevation: 3,
                 onPressed: () async {
                   DBservice dbINSTANCE = DBservice();
-                  dbINSTANCE.addToFavorite(
+                  await dbINSTANCE.addToFavorite(
                       userEMAIL: userEMAIL, caseID: widget.id);
+                  setState(() {});
                 },
                 child: const Icon(Icons.favorite_border),
               ),
@@ -377,18 +379,28 @@ class _HomeCaseState extends State<HomeCase> {
       if (doc.exists) {
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
         if (data?[widget.id] == widget.id) {
+          print('tema');
+          print(data?[widget.id]);
           setState(() {
             isFavorite = true;
           });
-          return true;
+          setState(() {
+            isFavorite = false;
+          });
         } else {
-          return false;
+          setState(() {
+            isFavorite = false;
+          });
         }
       } else {
-        return false;
+        setState(() {
+            isFavorite = false;
+          });
       }
     } else {
-      return false;
+      setState(() {
+            isFavorite = false;
+          });
     }
   }
 }
