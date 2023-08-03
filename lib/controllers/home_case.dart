@@ -1,6 +1,9 @@
 // ignore_for_file: unused_import
 
+// import 'dart:js_interop';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nouga/controllers/pictures_case.dart';
 import '../globals/drawer.dart';
@@ -30,7 +33,7 @@ class HomeCase extends StatefulWidget {
 class _HomeCaseState extends State<HomeCase> {
   late SharedPreferences prefs;
   String userEMAIL = "";
-
+  bool isFavorite = false;
   @override
   void initState() {
     super.initState();
@@ -46,6 +49,9 @@ class _HomeCaseState extends State<HomeCase> {
 
   @override
   Widget build(BuildContext context) {
+    checkIsFavorite(userID: userEMAIL);
+    print('c le favori lui ?');
+    print(isFavorite);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -275,24 +281,45 @@ class _HomeCaseState extends State<HomeCase> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FloatingActionButton.small(
-              heroTag: 'favorite',
-              backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-              elevation: 3,
-              onPressed: () async {
-                DBservice dbINSTANCE = DBservice();
-                dbINSTANCE.addToFavorite(
-                    userEMAIL: userEMAIL, caseID: widget.id);
-              },
-              child: const Icon(Icons.favorite_border),
-            ),
-            SizedBox(width: 10),
-            widget.globals.textWithRainbowPolice(
-                align: TextAlign.end,
-                size: 15,
-                weight: FontWeight.w600,
-                color: Colors.black,
-                textData: 'Ajouter à vos cases enregistrés')
+            if (isFavorite) ...[
+              FloatingActionButton.small(
+                heroTag: 'favorite',
+                backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                elevation: 3,
+                onPressed: () async {
+                  DBservice dbINSTANCE = DBservice();
+                  dbINSTANCE.removeFromFavorite(
+                      userEMAIL: userEMAIL, caseID: widget.id);
+                },
+                child: const Icon(Icons.favorite),
+              ),
+              SizedBox(width: 10),
+              widget.globals.textWithRainbowPolice(
+                  align: TextAlign.end,
+                  size: 15,
+                  weight: FontWeight.w600,
+                  color: Colors.black,
+                  textData: 'Retirer de vos cases enregistrés')
+            ] else ...[
+              FloatingActionButton.small(
+                heroTag: 'favorite',
+                backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                elevation: 3,
+                onPressed: () async {
+                  DBservice dbINSTANCE = DBservice();
+                  dbINSTANCE.addToFavorite(
+                      userEMAIL: userEMAIL, caseID: widget.id);
+                },
+                child: const Icon(Icons.favorite_border),
+              ),
+              SizedBox(width: 10),
+              widget.globals.textWithRainbowPolice(
+                  align: TextAlign.end,
+                  size: 15,
+                  weight: FontWeight.w600,
+                  color: Colors.black,
+                  textData: 'Ajouter à vos cases enregistrés')
+            ],
           ],
         )
       ],
@@ -340,6 +367,28 @@ class _HomeCaseState extends State<HomeCase> {
                 image: NetworkImage(dotenv.env['DEFAULT_PATH_IMAGE']!),
                 fit: BoxFit.contain)),
       );
+    }
+  }
+
+  checkIsFavorite({required String userID}) async {
+    if (userID != "") {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      DocumentSnapshot doc = await db.collection('favorites').doc(userID).get();
+      if (doc.exists) {
+        Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+        if (data?[widget.id] == widget.id) {
+          setState(() {
+            isFavorite = true;
+          });
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   }
 }

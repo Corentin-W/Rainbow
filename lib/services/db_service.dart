@@ -7,14 +7,14 @@ class DBservice {
   }
 
   addToFavorite({required String userEMAIL, required String caseID}) async {
-    print('zeparti');
-    print(userEMAIL);
-    print(caseID);
     FirebaseFirestore db = FirebaseFirestore.instance;
     var userDocRef = db.collection('favorites').doc(userEMAIL);
+    final datas = {caseID: caseID};
+    var result = userDocRef.set(datas);
+  }
 
-    final datas = {'wiwiiwiw': FieldValue.increment(1)};
-    var result = userDocRef.add(datas).then();
-    print(result);
+  removeFromFavorite({required String userEMAIL, required String caseID})async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    var userDocRef = db.collection('favorites').doc(userEMAIL);
   }
 }
