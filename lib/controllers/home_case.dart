@@ -41,17 +41,21 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   Future<void> _initializeData() async {
+    print(widget.id);
+    print('arrivee');
+    print(isFavorite);
     prefs = await SharedPreferences.getInstance();
     setState(() {
       userEMAIL = prefs.getString('userEmail') ?? "";
     });
+    checkIsFavorite(userID: userEMAIL);
+
+    print('deparrt');
+    print(isFavorite);
   }
 
   @override
   Widget build(BuildContext context) {
-    checkIsFavorite(userID: userEMAIL);
-    print('c le favori lui ?');
-    print(isFavorite);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -151,7 +155,6 @@ class _HomeCaseState extends State<HomeCase> {
     if (caseInfos.data['user_email'] != null) {
       userOwnerCase = caseInfos.data['user_email'];
     }
-    print(caseInfos.data['photos']);
     return Column(
       children: [
         Row(
@@ -290,7 +293,9 @@ class _HomeCaseState extends State<HomeCase> {
                   DBservice dbINSTANCE = DBservice();
                   await dbINSTANCE.removeFromFavorite(
                       userEMAIL: userEMAIL, caseID: widget.id);
-                  setState(() {});
+                  setState(() {
+                    isFavorite = false;
+                  });
                 },
                 child: const Icon(Icons.favorite),
               ),
@@ -310,7 +315,9 @@ class _HomeCaseState extends State<HomeCase> {
                   DBservice dbINSTANCE = DBservice();
                   await dbINSTANCE.addToFavorite(
                       userEMAIL: userEMAIL, caseID: widget.id);
-                  setState(() {});
+                  setState(() {
+                    isFavorite = true;
+                  });
                 },
                 child: const Icon(Icons.favorite_border),
               ),
@@ -373,19 +380,21 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   checkIsFavorite({required String userID}) async {
+    print('yaqqun?');
+    print(userID);
     if (userID != "") {
       FirebaseFirestore db = FirebaseFirestore.instance;
       DocumentSnapshot doc = await db.collection('favorites').doc(userID).get();
+      print(doc);
       if (doc.exists) {
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+        print('datarecup');
+        print(data);
         if (data?[widget.id] == widget.id) {
           print('tema');
           print(data?[widget.id]);
           setState(() {
             isFavorite = true;
-          });
-          setState(() {
-            isFavorite = false;
           });
         } else {
           setState(() {
@@ -394,13 +403,13 @@ class _HomeCaseState extends State<HomeCase> {
         }
       } else {
         setState(() {
-            isFavorite = false;
-          });
+          isFavorite = false;
+        });
       }
     } else {
       setState(() {
-            isFavorite = false;
-          });
+        isFavorite = false;
+      });
     }
   }
 }
