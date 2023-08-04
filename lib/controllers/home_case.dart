@@ -19,8 +19,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class HomeCase extends StatefulWidget {
   String id;
   Globals globals = Globals();
-  final CarouselController _controller = CarouselController();
-  int _current = 0;
   HomeCase({
     Key? key,
     required this.id,
@@ -41,17 +39,11 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   Future<void> _initializeData() async {
-    print(widget.id);
-    print('arrivee');
-    print(isFavorite);
     prefs = await SharedPreferences.getInstance();
     setState(() {
       userEMAIL = prefs.getString('userEmail') ?? "";
     });
     checkIsFavorite(userID: userEMAIL);
-
-    print('deparrt');
-    print(isFavorite);
   }
 
   @override
@@ -168,9 +160,11 @@ class _HomeCaseState extends State<HomeCase> {
                   backgroundColor: const Color.fromARGB(175, 255, 239, 8),
                   elevation: 3,
                   onPressed: () async {
-                    var loadingAnimation = LoadingAnimationWidget.inkDrop(
-                      color: Color.fromARGB(255, 24, 21, 197),
-                      size: 100,
+                    var loadingAnimation = Center(
+                      child: LoadingAnimationWidget.inkDrop(
+                        color: widget.globals.getRainbowMainColor(),
+                        size: 100,
+                      ),
                     );
                     showDialog(
                       context: context,
@@ -214,9 +208,11 @@ class _HomeCaseState extends State<HomeCase> {
                   backgroundColor: const Color.fromARGB(175, 255, 239, 8),
                   elevation: 3,
                   onPressed: () async {
-                    var loadingAnimation = LoadingAnimationWidget.inkDrop(
-                      color: Color.fromARGB(255, 24, 21, 197),
-                      size: 100,
+                    var loadingAnimation = Center(
+                      child: LoadingAnimationWidget.inkDrop(
+                        color: widget.globals.getRainbowMainColor(),
+                        size: 50,
+                      ),
                     );
                     // showDialog(
                     //   context: context,

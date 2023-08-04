@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:nouga/controllers/followed_cases.dart';
 import 'package:nouga/controllers/home_case.dart';
 import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../globals/drawer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -16,6 +18,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String userEMAIL = "";
+  late SharedPreferences prefs;
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userEMAIL = prefs.getString('userEmail') ?? "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Globals globals = Globals();
@@ -69,9 +86,11 @@ class _HomeState extends State<Home> {
             FirebaseFirestore.instance.collection('cases').limit(6).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return LoadingAnimationWidget.inkDrop(
-              color: Colors.black,
-              size: 200,
+            return Center(
+              child: LoadingAnimationWidget.inkDrop(
+                color: globals.getRainbowMainColor(),
+                size: 50,
+              ),
             );
           }
 
@@ -234,7 +253,13 @@ class _HomeState extends State<Home> {
           child: FloatingActionButton(
             heroTag: 'favorite',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          FollowedCases(userEmail: userEMAIL)));
+            },
             child: const Icon(Icons.favorite),
           ),
         ),
