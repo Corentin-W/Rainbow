@@ -48,18 +48,32 @@ class _FollowedCasesState extends State<FollowedCases> {
                 size: 100,
               ),
             );
-          } else if (snapshot.connectionState == ConnectionState.waiting ||
-              snapshot.connectionState == ConnectionState.done) {
+          } else if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasError) {
               return const Text('Error');
             } else if (snapshot.hasData) {
-              return Text(snapshot.data.toString(),
-                  style: const TextStyle(color: Colors.red, fontSize: 40));
+              return ListView.separated(
+                shrinkWrap: true,
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return Text('yello');
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+              );
             } else {
               return const Text('Empty data');
             }
+          } else {
+            print(snapshot.connectionState);
+            return Center(
+              child: LoadingAnimationWidget.inkDrop(
+                color: globals.getRainbowMainColor(),
+                size: 100,
+              ),
+            );
           }
-          return Text('data');
         },
       ),
     );

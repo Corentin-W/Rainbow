@@ -214,14 +214,6 @@ class _HomeCaseState extends State<HomeCase> {
                         size: 50,
                       ),
                     );
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (BuildContext context) {
-                    //     return AlertDialog(
-                    //       content: loadingAnimation,
-                    //     );
-                    //   },
-                    // );
                     Storage storageInstance = Storage();
                     if (caseInfos.data['photos'] != null) {
                       await storageInstance.deleteFileFromUrl(
@@ -229,19 +221,6 @@ class _HomeCaseState extends State<HomeCase> {
                           downloadUrl: caseInfos.data['photos']);
                       setState(() {});
                     }
-
-                    // String? isUploaded = await storageInstance.uploadImage(
-                    //     pathToStorage: 'cases/${widget.id}/pictures/');
-                    // if (isUploaded != 'error') {
-                    //   DBservice addEntryDocument = DBservice();
-                    //   if (isUploaded != null) {
-                    //     addEntryDocument.addEntryCase(
-                    //         caseID: widget.id, fileNameUrl: isUploaded);
-                    //   }
-                    //   Navigator.of(context).pop();
-                    // } else {
-                    //   Navigator.of(context).pop();
-                    // }
                   },
                   child: const Icon(Icons.delete_outline),
                 ),

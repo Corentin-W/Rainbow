@@ -10,7 +10,7 @@ class DBservice {
     FirebaseFirestore db = FirebaseFirestore.instance;
     var userDocRef = db.collection('favorites').doc(userEMAIL);
     final datas = {caseID: caseID};
-    var result = userDocRef.set(datas);
+    var result = userDocRef.update(datas);
   }
 
   removeFromFavorite(
