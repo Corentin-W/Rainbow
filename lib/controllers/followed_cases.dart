@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -34,48 +36,29 @@ class _FollowedCasesState extends State<FollowedCases> {
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       drawer: DrawerGlobal(contextFrom: context),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('favorites')
-            .doc(widget.userEmail)
-            .snapshots(),
-        builder: (context, snapshot) {
-          print(snapshot);
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: LoadingAnimationWidget.inkDrop(
-                color: globals.getRainbowMainColor(),
-                size: 100,
-              ),
-            );
-          } else if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasError) {
-              return const Text('Error');
-            } else if (snapshot.hasData) {
-              return ListView.separated(
-                shrinkWrap: true,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return Text('yello');
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider();
-                },
-              );
-            } else {
-              return const Text('Empty data');
-            }
-          } else {
-            print(snapshot.connectionState);
-            return Center(
-              child: LoadingAnimationWidget.inkDrop(
-                color: globals.getRainbowMainColor(),
-                size: 100,
-              ),
-            );
-          }
-        },
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: displayFavList(),
       ),
     );
+  }
+
+  displayFavList() {
+    return FutureBuilder(
+      future: getFavListFromUser(userEMAIL: widget.userEmail),
+      builder: (context, snapshot) {
+        
+      },
+    )
+
+  }
+
+  Future<Map> getFavListFromUser({required String userEMAIL}) async {
+    Map favList = {};
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    DocumentSnapshot<Map<String, dynamic>> userList =
+        await db.collection('favorites').doc(userEMAIL).get();
+    favList = userList.exists ? userList.data()! : {};
+    return favList;
   }
 }

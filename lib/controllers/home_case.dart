@@ -355,19 +355,12 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   checkIsFavorite({required String userID}) async {
-    print('yaqqun?');
-    print(userID);
     if (userID != "") {
       FirebaseFirestore db = FirebaseFirestore.instance;
       DocumentSnapshot doc = await db.collection('favorites').doc(userID).get();
-      print(doc);
       if (doc.exists) {
         Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
-        print('datarecup');
-        print(data);
         if (data?[widget.id] == widget.id) {
-          print('tema');
-          print(data?[widget.id]);
           setState(() {
             isFavorite = true;
           });
