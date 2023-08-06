@@ -55,8 +55,6 @@ class _PicturesCaseState extends State<PicturesCase> {
             String isUploaded = await storageInstance.uploadImage(
                 pathToStorage: 'cases/${widget.caseID}/pictures/');
             if (isUploaded != 'error') {
-              print('icicicici');
-              print(isUploaded);
               DBservice addEntryDocument = DBservice();
               addEntryDocument.addEntryCase(
                   caseID: widget.caseID, fileNameUrl: isUploaded);
@@ -84,7 +82,7 @@ class _PicturesCaseState extends State<PicturesCase> {
           return Expanded(
             child: Column(
               children: [
-                if (snapshot.data!.items.length == 0) ...[addPhoto()],
+                if (snapshot.data!.items.isEmpty) ...[addPhoto()],
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: snapshot.data!.items.length,
@@ -101,7 +99,7 @@ class _PicturesCaseState extends State<PicturesCase> {
                             size: 200,
                           );
                         } else if (urlSnapshot.hasError) {
-                          return Text('Error loading image');
+                          return const Text('Error loading image');
                         } else {
                           return Container(
                             width: 150, // Adjust the width as needed

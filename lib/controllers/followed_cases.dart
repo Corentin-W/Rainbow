@@ -1,10 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
@@ -46,11 +43,8 @@ class _FollowedCasesState extends State<FollowedCases> {
   displayFavList() {
     return FutureBuilder(
       future: getFavListFromUser(userEMAIL: widget.userEmail),
-      builder: (context, snapshot) {
-        
-      },
-    )
-
+      builder: (context, snapshot) {},
+    );
   }
 
   Future<Map> getFavListFromUser({required String userEMAIL}) async {

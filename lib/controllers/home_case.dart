@@ -118,7 +118,7 @@ class _HomeCaseState extends State<HomeCase> {
       mainAxisSize: MainAxisSize.max,
       children: [
         widget.globals.textWithRainbowPolice(
-            textData: 'Age :  ' + infosCases.data!['age'] + ' ans',
+            textData: '${'Age :  ' + infosCases.data!['age']} ans',
             align: TextAlign.start,
             size: 15,
             weight: FontWeight.w600),
@@ -128,7 +128,7 @@ class _HomeCaseState extends State<HomeCase> {
             size: 15,
             weight: FontWeight.w600),
         widget.globals.textWithRainbowPolice(
-            textData: 'Taille :  ' + infosCases.data!['taille'] + ' cm',
+            textData: '${'Taille :  ' + infosCases.data!['taille']} cm',
             align: TextAlign.start,
             size: 15,
             weight: FontWeight.w600),
@@ -195,7 +195,7 @@ class _HomeCaseState extends State<HomeCase> {
                   },
                   child: const Icon(Icons.photo_camera),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 widget.globals.textWithRainbowPolice(
                     align: TextAlign.end,
                     size: 15,
@@ -208,12 +208,6 @@ class _HomeCaseState extends State<HomeCase> {
                   backgroundColor: const Color.fromARGB(175, 255, 239, 8),
                   elevation: 3,
                   onPressed: () async {
-                    var loadingAnimation = Center(
-                      child: LoadingAnimationWidget.inkDrop(
-                        color: widget.globals.getRainbowMainColor(),
-                        size: 50,
-                      ),
-                    );
                     Storage storageInstance = Storage();
                     if (caseInfos.data['photos'] != null) {
                       await storageInstance.deleteFileFromUrl(
@@ -224,7 +218,7 @@ class _HomeCaseState extends State<HomeCase> {
                   },
                   child: const Icon(Icons.delete_outline),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 widget.globals.textWithRainbowPolice(
                     align: TextAlign.end,
                     size: 15,
@@ -274,7 +268,7 @@ class _HomeCaseState extends State<HomeCase> {
                 },
                 child: const Icon(Icons.favorite),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               widget.globals.textWithRainbowPolice(
                   align: TextAlign.end,
                   size: 15,
@@ -296,7 +290,7 @@ class _HomeCaseState extends State<HomeCase> {
                 },
                 child: const Icon(Icons.favorite_border),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               widget.globals.textWithRainbowPolice(
                   align: TextAlign.end,
                   size: 15,
@@ -315,14 +309,9 @@ class _HomeCaseState extends State<HomeCase> {
     Duration difference = DateTime.now().difference(date);
     int days = difference.inDays;
     int hours = difference.inHours % 24;
-    int minutes = difference.inMinutes % 60;
     final localisation = infosCases.data!['localisation'];
     return widget.globals.textWithRainbowPolice(
-        textData: 'Disparition depuis ' +
-            days.toString() +
-            ' jour(s) et ' +
-            hours.toString() +
-            ' heure(s), a ' +
+        textData: 'Disparition depuis $days jour(s) et $hours heure(s), a ' +
             localisation,
         align: TextAlign.center,
         size: 12,
@@ -339,7 +328,7 @@ class _HomeCaseState extends State<HomeCase> {
           minScale: PhotoViewComputedScale.contained * 1,
           maxScale: PhotoViewComputedScale.covered * 2,
           initialScale: PhotoViewComputedScale.contained,
-          backgroundDecoration: BoxDecoration(color: Colors.transparent),
+          backgroundDecoration: const BoxDecoration(color: Colors.transparent),
         ),
       );
     } else {
