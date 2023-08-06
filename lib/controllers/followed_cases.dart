@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
@@ -40,13 +41,6 @@ class _FollowedCasesState extends State<FollowedCases> {
     );
   }
 
-  displayFavList() {
-    return FutureBuilder(
-      future: getFavListFromUser(userEMAIL: widget.userEmail),
-      builder: (context, snapshot) {},
-    );
-  }
-
   Future<Map> getFavListFromUser({required String userEMAIL}) async {
     Map favList = {};
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -54,5 +48,31 @@ class _FollowedCasesState extends State<FollowedCases> {
         await db.collection('favorites').doc(userEMAIL).get();
     favList = userList.exists ? userList.data()! : {};
     return favList;
+  }
+
+  displayFavList() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    return FutureBuilder(
+  future: db.collection('favorites').doc(widget.userEmail).get(), 
+  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) { 
+    if (snapshot.hasError) {
+      return Text("Something went wrong");
+    }
+
+    if (snapshot.hasData) { // 👈
+      snapshot.data!.forEach((e) {
+        print(e.data.toString());
+        print(e.data.runtimeType);
+      });
+    }
+
+    return Center(
+                      child: LoadingAnimationWidget.inkDrop(
+                        color: globals.getRainbowMainColor(),
+                        size: 100,
+                      ),
+                    );;
+  },
+);
   }
 }
