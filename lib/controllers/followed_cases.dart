@@ -41,38 +41,37 @@ class _FollowedCasesState extends State<FollowedCases> {
     );
   }
 
-  Future<Map> getFavListFromUser({required String userEMAIL}) async {
-    Map favList = {};
+  Future<List> getFavListFromUser({required String userEMAIL}) async {
+    List favList = [];
     FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentSnapshot<Map<String, dynamic>> userList =
-        await db.collection('favorites').doc(userEMAIL).get();
-    favList = userList.exists ? userList.data()! : {};
+    QuerySnapshot querySnapshot = await db.collection('favorites').get();
+    favList = querySnapshot.docs
+        .map((doc) => doc.data())
+        .toList(); // Utiliser docs et map() pour obtenir une liste de données
     return favList;
   }
 
-  displayFavList() {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    return FutureBuilder(
-  future: db.collection('favorites').doc(widget.userEmail).get(), 
-  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) { 
-    if (snapshot.hasError) {
-      return Text("Something went wrong");
-    }
-
-    if (snapshot.hasData) { // 👈
-      snapshot.data!.forEach((e) {
-        print(e.data.toString());
-        print(e.data.runtimeType);
-      });
-    }
-
-    return Center(
-                      child: LoadingAnimationWidget.inkDrop(
-                        color: globals.getRainbowMainColor(),
-                        size: 100,
-                      ),
-                    );;
-  },
-);
-  }
+displayFavList() {
+  Future<List> userFavList = getFavListFromUser(userEMAIL: widget.userEmail);
+  return FutureBuilder<List>(
+    future: userFavList, // Le futur à attendre
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        // Le futur est terminé avec succès
+        return ListView.builder(
+          itemCount: snapshot.data!.length, // Nombre d'éléments dans la liste favList
+          itemBuilder: (context, i) {
+            return Text(snapshot.data![i]); // Widget à afficher pour chaque élément
+          },
+        );
+      } else if (snapshot.hasError) {
+        // Le futur est terminé avec erreur
+        return Text('Une erreur est survenue: ${snapshot.error}');
+      } else {
+        // Le futur est en attente
+        return CircularProgressIndicator();
+      }
+    },
+  );
+}
 }
