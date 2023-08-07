@@ -44,34 +44,50 @@ class _FollowedCasesState extends State<FollowedCases> {
   Future<List> getFavListFromUser({required String userEMAIL}) async {
     List favList = [];
     FirebaseFirestore db = FirebaseFirestore.instance;
-    QuerySnapshot querySnapshot = await db.collection('favorites').get();
-    favList = querySnapshot.docs
-        .map((doc) => doc.data())
-        .toList(); // Utiliser docs et map() pour obtenir une liste de données
+    DocumentSnapshot<Map<String, dynamic>> querySnapshot =
+        await db.collection('favorites').doc(userEMAIL).get();
+    favList = querySnapshot.data()?.values.toList() ?? [];
     return favList;
   }
 
-displayFavList() {
-  Future<List> userFavList = getFavListFromUser(userEMAIL: widget.userEmail);
-  return FutureBuilder<List>(
-    future: userFavList, // Le futur à attendre
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        // Le futur est terminé avec succès
-        return ListView.builder(
-          itemCount: snapshot.data!.length, // Nombre d'éléments dans la liste favList
-          itemBuilder: (context, i) {
-            return Text(snapshot.data![i]); // Widget à afficher pour chaque élément
-          },
-        );
-      } else if (snapshot.hasError) {
-        // Le futur est terminé avec erreur
-        return Text('Une erreur est survenue: ${snapshot.error}');
-      } else {
-        // Le futur est en attente
-        return CircularProgressIndicator();
-      }
-    },
-  );
-}
+  displayFavList() {
+    Future<List> userFavList = getFavListFromUser(userEMAIL: widget.userEmail);
+    return Expanded(
+      child: FutureBuilder<List>(
+        future: userFavList, // Le futur à attendre
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            // Le futur est terminé avec succès
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot
+                  .data!.length, // Nombre d'éléments dans la liste favList
+              itemBuilder: (context, i) {
+                return cardCase(
+                    caseID: snapshot
+                        .data![i]); // Widget à afficher pour chaque élément
+              },
+            );
+          } else if (snapshot.hasError) {
+            // Le futur est terminé avec erreur
+            return Text('Une erreur est survenue: ${snapshot.error}');
+          } else {
+            // Le futur est en attente
+            return Center(
+              child: LoadingAnimationWidget.inkDrop(
+                color: globals.getRainbowMainColor(),
+                size: 50,
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  cardCase({required caseID}) {
+    print(caseID);
+    
+    return Text('hello');
+  }
 }
