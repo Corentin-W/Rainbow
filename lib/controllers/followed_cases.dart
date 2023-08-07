@@ -91,8 +91,6 @@ class _FollowedCasesState extends State<FollowedCases> {
     return StreamBuilder(
       stream: globals.getAllInfosFromCase(caseID: caseID),
       builder: (context, snapshot) {
-        print('leretour');
-        print(snapshot);
         return const Text('data');
       },
     );
