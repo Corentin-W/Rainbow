@@ -122,7 +122,7 @@ class _FollowedCasesState extends State<FollowedCases> {
               children: <Widget>[
                 // Add padding around the row widget
                 Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding:  EdgeInsets.all(15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
