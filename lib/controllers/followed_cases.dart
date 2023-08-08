@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:nouga/controllers/home_case.dart';
 
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
@@ -86,12 +87,101 @@ class _FollowedCasesState extends State<FollowedCases> {
   }
 
   cardCase({required caseID}) {
-    final caseINFOS = globals.getAllInfosFromCase(caseID: caseID);
-
+    // final caseINFOS = globals.getAllInfosFromCase(caseID: caseID);
     return StreamBuilder(
       stream: globals.getAllInfosFromCase(caseID: caseID),
       builder: (context, snapshot) {
-        return const Text('data');
+        // if()
+        if (snapshot.data?['date'] == null) {
+          DateTime date = DateTime(1970);
+        } else {
+          DateTime date = snapshot.data?['date'].toDate();
+        }
+        DateTime date = DateTime(1970);
+        Duration difference = DateTime.now().difference(date);
+        int days = difference.inDays;
+        int hours = difference.inHours % 24;
+        int minutes = difference.inMinutes % 60;
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeCase(id: caseID)),
+            );
+          },
+          child: Card(
+            // Define the shape of the card
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            // Define how the card's content should be clipped
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            // Define the child widget of the card
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Add padding around the row widget
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Add an image widget to display an image
+                      Image.network(
+                        snapshot.data!['photos'],
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                      ),
+                      // Add some spacing between the image and the text
+                      Container(width: 20),
+                      // Add an expanded widget to take up the remaining horizontal space
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Add some spacing between the top of the card and the title
+                            Container(height: 5),
+                            // Add a title widget
+                            globals.textWithRainbowPolice(
+                                align: TextAlign.start,
+                                size: 18,
+                                weight: FontWeight.w700,
+                                color: Colors.black,
+                                textData: snapshot.data!['prenom'] +
+                                    ' ' +
+                                    snapshot.data!['nom']),
+                            // Add some spacing between the title and the subtitle
+                            Container(height: 5),
+                            // Add a subtitle widget
+                            globals.textWithRainbowPolice(
+                                align: TextAlign.start,
+                                size: 15,
+                                weight: FontWeight.w600,
+                                color: Colors.black,
+                                textData:
+                                    '${'Disparition : Il y a ' + days.toString()} jour(s)'),
+                            // Add some spacing between the subtitle and the text
+                            Container(height: 10),
+                            // Add a text widget to display some text
+                            globals.textWithRainbowPolice(
+                                align: TextAlign.start,
+                                size: 13,
+                                weight: FontWeight.w600,
+                                color: Colors.black,
+                                textData: snapshot.data!['taille'] +
+                                    ' ' +
+                                    snapshot.data!['nom']),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
