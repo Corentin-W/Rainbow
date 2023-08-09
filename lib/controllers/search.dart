@@ -15,7 +15,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   Globals globals = Globals();
-
+  String? searchText;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,44 +35,72 @@ class _SearchState extends State<Search> {
   }
 
   casesList() {
-  return FutureBuilder(
-    future: FirebaseFirestore.instance.collection('cases').get(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(
-          child: LoadingAnimationWidget.inkDrop(
-            color: globals.getRainbowMainColor(),
-            size: 50,
-          ),
-        );
-      } else if (snapshot.hasError) {
-        return Center(
-          child: Text('Error: ${snapshot.error}'),
-        );
-      } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-        return const Center(
-          child: Text('No data available.'),
-        );
-      } else {
-        return ListView.builder(
-          itemCount: snapshot.data.docs.length,
-          itemBuilder: (context, index) {
-            // Accédez aux données de chaque document ici
-            DocumentSnapshot document = snapshot.data.docs[index];
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      physics: const BouncingScrollPhysics(),
+      child: Expanded(
+        child: Column(
+          children: [
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchText = value.toLowerCase();
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Search',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+            FutureBuilder(
+              future: FirebaseFirestore.instance.collection('cases').get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: LoadingAnimationWidget.inkDrop(
+                      color: globals.getRainbowMainColor(),
+                      size: 50,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text('No data available.'),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot document = snapshot.data!.docs[index];
+                      Map<String, dynamic> data =
+                          document.data() as Map<String, dynamic>;
 
-            // Construisez votre widget d'élément de liste ici
-            Widget listItem = ListTile(
-              title: Text(data['title']), // Exemple : utilisez un champ 'title'
-              subtitle: Text(data['description']), // Exemple : utilisez un champ 'description'
-            );
+                      // Vérifiez si le texte de recherche correspond à certains champs de données
+                      bool matchesSearch =
+                          data['title'].toLowerCase().contains(searchText) ||
+                              data['description']
+                                  .toLowerCase()
+                                  .contains(searchText);
 
-            return listItem;
-          },
-        );
-      }
-    },
-  );
-}
+                      if (!matchesSearch) {
+                        return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
+                      }
 
+                      return ListTile(
+                        title: Text(data['prenom']),
+                        subtitle: Text(data['nom']),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
