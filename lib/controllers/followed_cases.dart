@@ -91,8 +91,6 @@ class _FollowedCasesState extends State<FollowedCases> {
     return StreamBuilder(
       stream: globals.getAllInfosFromCase(caseID: caseID),
       builder: (context, snapshot) {
-        print('mesdatas');
-        print(snapshot.data);
         if (snapshot.data == null) {
           return Text('NO DATAS');
         }
