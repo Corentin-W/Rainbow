@@ -91,13 +91,12 @@ class _FollowedCasesState extends State<FollowedCases> {
     return StreamBuilder(
       stream: globals.getAllInfosFromCase(caseID: caseID),
       builder: (context, snapshot) {
-        // if()
-        if (snapshot.data?['date'] == null) {
-          DateTime date = DateTime(1970);
-        } else {
-          DateTime date = snapshot.data?['date'].toDate();
+        print('mesdatas');
+        print(snapshot.data);
+        if (snapshot.data == null) {
+          return Text('NO DATAS');
         }
-        DateTime date = DateTime(1970);
+        DateTime date = snapshot.data?['date'].toDate();
         Duration difference = DateTime.now().difference(date);
         int days = difference.inDays;
         int hours = difference.inHours % 24;
@@ -122,7 +121,7 @@ class _FollowedCasesState extends State<FollowedCases> {
               children: <Widget>[
                 // Add padding around the row widget
                 Padding(
-                  padding:  EdgeInsets.all(15),
+                  padding: EdgeInsets.all(15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
