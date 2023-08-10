@@ -38,68 +38,68 @@ class _SearchState extends State<Search> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
-      child: Expanded(
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  searchText = value.toLowerCase();
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Search',
-                prefixIcon: Icon(Icons.search),
-              ),
+      child: Column(
+        children: [
+          TextField(
+            onChanged: (value) {
+              setState(() {
+                searchText = value.toLowerCase();
+              });
+            },
+            decoration: const InputDecoration(
+              labelText: 'Search',
+              prefixIcon: Icon(Icons.search),
             ),
-            FutureBuilder(
-              future: FirebaseFirestore.instance.collection('cases').get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: LoadingAnimationWidget.inkDrop(
-                      color: globals.getRainbowMainColor(),
-                      size: 50,
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(
-                    child: Text('No data available.'),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot document = snapshot.data!.docs[index];
-                      Map<String, dynamic> data =
-                          document.data() as Map<String, dynamic>;
+          ),
+          FutureBuilder(
+            future: FirebaseFirestore.instance.collection('cases').get(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: LoadingAnimationWidget.inkDrop(
+                    color: globals.getRainbowMainColor(),
+                    size: 50,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Center(
+                  child: Text('No data available.'),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot document =
+                        snapshot.data!.docs[index];
+                    Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
 
-                      // Vérifiez si le texte de recherche correspond à certains champs de données
-                      bool matchesSearch =
-                          data['title'].toLowerCase().contains(searchText) ||
-                              data['description']
-                                  .toLowerCase()
-                                  .contains(searchText);
+                    // Vérifiez si le texte de recherche correspond à certains champs de données
+                    bool matchesSearch = data['title']
+                            .toLowerCase()
+                            .contains(searchText) ||
+                        data['description']
+                            .toLowerCase()
+                            .contains(searchText);
 
-                      if (!matchesSearch) {
-                        return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
-                      }
+                    if (!matchesSearch) {
+                      return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
+                    }
 
-                      return ListTile(
-                        title: Text(data['prenom']),
-                        subtitle: Text(data['nom']),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+                    return ListTile(
+                      title: Text(data['prenom']),
+                      subtitle: Text(data['nom']),
+                    );
+                  },
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
