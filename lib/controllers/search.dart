@@ -66,29 +66,30 @@ class _SearchState extends State<Search> {
                   child: Text('Error: ${snapshot.error}'),
                 );
               } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text('No data available.'),
                 );
               } else {
                 return ListView.builder(
+                  shrinkWrap: true,
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot document =
-                        snapshot.data!.docs[index];
+                    DocumentSnapshot document = snapshot.data!.docs[index];
                     Map<String, dynamic> data =
                         document.data() as Map<String, dynamic>;
 
                     // Vérifiez si le texte de recherche correspond à certains champs de données
-                    bool matchesSearch = data['title']
-                            .toLowerCase()
-                            .contains(searchText) ||
-                        data['description']
-                            .toLowerCase()
-                            .contains(searchText);
 
-                    if (!matchesSearch) {
-                      return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
-                    }
+                    // bool matchesSearch = snapshot.data!.docs[index]['prenom']
+                    //         .toLowerCase()
+                    //         .contains(searchText) ||
+                    //     snapshot.data!.docs[index]['nom']
+                    //         .toLowerCase()
+                    //         .contains(searchText);
+
+                    // if (!matchesSearch) {
+                    //   return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
+                    // }
 
                     return ListTile(
                       title: Text(data['prenom']),
