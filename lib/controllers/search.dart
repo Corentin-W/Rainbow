@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:nouga/controllers/home_case.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../globals/drawer.dart';
 import '../globals/globals.dart';
@@ -90,10 +92,35 @@ class _SearchState extends State<Search> {
                     // if (!matchesSearch) {
                     //   return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
                     // }
-
-                    return ListTile(
-                      title: Text(data['prenom']),
-                      subtitle: Text(data['nom']),
+                    late String img;
+                    if (data["photos"] == null) {
+                      img = dotenv.env['DEFAULT_PATH_IMAGE']!;
+                    } else {
+                      img = data["photos"];
+                    }
+                    return Column(
+                      children: [
+                        ListTile(
+                          leading: Image.network(img, width: 50, height: 50),
+                          title: Row(
+                            children: [
+                              Text(data['prenom']),
+                              const SizedBox(width: 5),
+                              Text(data['nom']),
+                            ],
+                          ),
+                          subtitle: Text(data['localisation']),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomeCase(id: document.id)),
+                            );
+                          },
+                        ),
+                        Divider()
+                      ],
                     );
                   },
                 );
