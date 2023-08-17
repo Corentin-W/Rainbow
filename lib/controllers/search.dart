@@ -49,7 +49,7 @@ class _SearchState extends State<Search> {
               });
             },
             decoration: const InputDecoration(
-              labelText: 'Search',
+              labelText: 'Rechercher',
               prefixIcon: Icon(Icons.search),
             ),
           ),
@@ -81,17 +81,17 @@ class _SearchState extends State<Search> {
                         document.data() as Map<String, dynamic>;
 
                     // Vérifiez si le texte de recherche correspond à certains champs de données
+                    if(searchText != null){
+bool matchesSearch =
+                        data['prenom'].toLowerCase().contains(searchText) ||
+                            data['nom'].toLowerCase().contains(searchText);
 
-                    // bool matchesSearch = snapshot.data!.docs[index]['prenom']
-                    //         .toLowerCase()
-                    //         .contains(searchText) ||
-                    //     snapshot.data!.docs[index]['nom']
-                    //         .toLowerCase()
-                    //         .contains(searchText);
+                    if (!matchesSearch) {
+                      return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
+                    }
+                    }
+                    
 
-                    // if (!matchesSearch) {
-                    //   return Container(); // Ne pas afficher l'élément s'il ne correspond pas à la recherche
-                    // }
                     late String img;
                     if (data["photos"] == null) {
                       img = dotenv.env['DEFAULT_PATH_IMAGE']!;
