@@ -298,6 +298,29 @@ class _HomeCaseState extends State<HomeCase> {
                   color: Colors.black,
                   textData: 'Ajouter à vos cases enregistrés')
             ],
+            if (userOwnerCase == userEMAIL) ...[
+              FloatingActionButton.small(
+                heroTag: 'close',
+                backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                elevation: 3,
+                onPressed: () async {
+                  DBservice dbINSTANCE = DBservice();
+                  await dbINSTANCE.addToFavorite(
+                      userEMAIL: userEMAIL, caseID: widget.id);
+                  setState(() {
+                    isFavorite = true;
+                  });
+                },
+                child: const Icon(Icons.check_box),
+              ),
+              const SizedBox(width: 10),
+              widget.globals.textWithRainbowPolice(
+                  align: TextAlign.end,
+                  size: 15,
+                  weight: FontWeight.w600,
+                  color: Colors.black,
+                  textData: 'Cloturer le case')
+            ]
           ],
         )
       ],
