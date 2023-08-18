@@ -93,9 +93,9 @@ class _HomeCaseState extends State<HomeCase> {
       const SizedBox(height: 20),
       photoWidget(infosCases: infosCase),
       const SizedBox(height: 20),
-      actionsButtons(caseInfos: infosCase),
+      ficheInfo(infosCases: infosCase),
       const SizedBox(height: 20),
-      ficheInfo(infosCases: infosCase)
+      actionsButtons(caseInfos: infosCase),
     ]);
   }
 
@@ -114,31 +114,57 @@ class _HomeCaseState extends State<HomeCase> {
   }
 
   ficheInfo({required infosCases}) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        widget.globals.textWithRainbowPolice(
-            textData: '${'Age :  ' + infosCases.data!['age']} ans',
-            align: TextAlign.start,
-            size: 15,
-            weight: FontWeight.w600),
-        widget.globals.textWithRainbowPolice(
-            textData: 'Cheveux :  ' + infosCases.data!['cheveux'],
-            align: TextAlign.start,
-            size: 15,
-            weight: FontWeight.w600),
-        widget.globals.textWithRainbowPolice(
-            textData: '${'Taille :  ' + infosCases.data!['taille']} cm',
-            align: TextAlign.start,
-            size: 15,
-            weight: FontWeight.w600),
-        widget.globals.textWithRainbowPolice(
-            textData:
-                'Vetements :  ' + infosCases.data!['description_vetements'],
-            align: TextAlign.start,
-            size: 15,
-            weight: FontWeight.w600)
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.globals.textWithRainbowPolice(
+                  textData: '${'Age :  ' + infosCases.data!['age']} ans',
+                  align: TextAlign.start,
+                  size: 18,
+                  weight: FontWeight.w600),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.globals.textWithRainbowPolice(
+                  textData: 'Cheveux :  ' + infosCases.data!['cheveux'],
+                  align: TextAlign.start,
+                  size: 18,
+                  weight: FontWeight.w600)
+            ],
+          ),
+          Row(
+            children: [
+              widget.globals.textWithRainbowPolice(
+                  textData: '${'Taille :  ' + infosCases.data!['taille']} cm',
+                  align: TextAlign.start,
+                  size: 18,
+                  weight: FontWeight.w600)
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.globals.textWithRainbowPolice(
+                  textData: 'Vetements :  ' +
+                      infosCases.data!['description_vetements'],
+                  align: TextAlign.start,
+                  size: 18,
+                  weight: FontWeight.w600)
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -147,126 +173,100 @@ class _HomeCaseState extends State<HomeCase> {
     if (caseInfos.data['user_email'] != null) {
       userOwnerCase = caseInfos.data['user_email'];
     }
-    return Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (userOwnerCase == userEMAIL) ...[
-              if (caseInfos.data['photos'] == null) ...[
-                FloatingActionButton.small(
-                  heroTag: 'pictures',
-                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-                  elevation: 3,
-                  onPressed: () async {
-                    var loadingAnimation = Center(
-                      child: LoadingAnimationWidget.inkDrop(
-                        color: widget.globals.getRainbowMainColor(),
-                        size: 100,
-                      ),
-                    );
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: loadingAnimation,
-                        );
-                      },
-                    );
-                    Storage storageInstance = Storage();
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              if (userOwnerCase == userEMAIL) ...[
+                if (caseInfos.data['photos'] == null) ...[
+                  FloatingActionButton.small(
+                    heroTag: 'pictures',
+                    backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                    elevation: 3,
+                    onPressed: () async {
+                      var loadingAnimation = Center(
+                        child: LoadingAnimationWidget.inkDrop(
+                          color: widget.globals.getRainbowMainColor(),
+                          size: 100,
+                        ),
+                      );
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: loadingAnimation,
+                          );
+                        },
+                      );
+                      Storage storageInstance = Storage();
 
-                    String? isUploaded = await storageInstance.uploadImage(
-                        pathToStorage: 'cases/${widget.id}/pictures/');
-                    if (isUploaded != 'error') {
-                      DBservice addEntryDocument = DBservice();
-                      if (isUploaded != null) {
-                        // await storageInstance.deleteFileFromUrl(
-                        //     caseID: widget.id,
-                        //     downloadUrl: caseInfos.data['photos']);
-                        addEntryDocument.addEntryCase(
-                            caseID: widget.id, fileNameUrl: isUploaded);
+                      String? isUploaded = await storageInstance.uploadImage(
+                          pathToStorage: 'cases/${widget.id}/pictures/');
+                      if (isUploaded != 'error') {
+                        DBservice addEntryDocument = DBservice();
+                        if (isUploaded != null) {
+                          // await storageInstance.deleteFileFromUrl(
+                          //     caseID: widget.id,
+                          //     downloadUrl: caseInfos.data['photos']);
+                          addEntryDocument.addEntryCase(
+                              caseID: widget.id, fileNameUrl: isUploaded);
+                        }
+                        setState(() {});
+                        Navigator.of(context).pop();
+                      } else {
+                        Navigator.of(context).pop();
                       }
-                      setState(() {});
-                      Navigator.of(context).pop();
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Icon(Icons.photo_camera),
-                ),
-                const SizedBox(width: 10),
-                widget.globals.textWithRainbowPolice(
-                    align: TextAlign.end,
-                    size: 15,
-                    weight: FontWeight.w600,
-                    color: Colors.black,
-                    textData: 'Ajouter une photo')
-              ] else ...[
-                FloatingActionButton.small(
-                  heroTag: 'picture',
-                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-                  elevation: 3,
-                  onPressed: () async {
-                    Storage storageInstance = Storage();
-                    if (caseInfos.data['photos'] != null) {
-                      await storageInstance.deleteFileFromUrl(
-                          caseID: widget.id,
-                          downloadUrl: caseInfos.data['photos']);
-                      setState(() {});
-                    }
-                  },
-                  child: const Icon(Icons.delete_outline),
-                ),
-                const SizedBox(width: 10),
-                widget.globals.textWithRainbowPolice(
-                    align: TextAlign.end,
-                    size: 15,
-                    weight: FontWeight.w600,
-                    color: Colors.black,
-                    textData: 'Supprimer la photo')
+                    },
+                    child: const Icon(Icons.photo_camera),
+                  ),
+                  const SizedBox(width: 10),
+                  widget.globals.textWithRainbowPolice(
+                      align: TextAlign.end,
+                      size: 15,
+                      weight: FontWeight.w600,
+                      color: Colors.black,
+                      textData: 'Ajouter une photo')
+                ] else ...[
+                  FloatingActionButton.small(
+                    heroTag: 'picture',
+                    backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                    elevation: 3,
+                    onPressed: () async {
+                      Storage storageInstance = Storage();
+                      if (caseInfos.data['photos'] != null) {
+                        await storageInstance.deleteFileFromUrl(
+                            caseID: widget.id,
+                            downloadUrl: caseInfos.data['photos']);
+                        setState(() {});
+                      }
+                    },
+                    child: const Icon(Icons.delete_outline),
+                  ),
+                  const SizedBox(width: 10),
+                  widget.globals.textWithRainbowPolice(
+                      align: TextAlign.end,
+                      size: 15,
+                      weight: FontWeight.w600,
+                      color: Colors.black,
+                      textData: 'Supprimer la photo')
+                ],
               ],
             ],
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton.small(
-              heroTag: 'messages',
-              backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-              elevation: 3,
-              onPressed: () {},
-              child: const Icon(Icons.message),
-            ),
-            const SizedBox(width: 10),
-            widget.globals.textWithRainbowPolice(
-                align: TextAlign.end,
-                size: 15,
-                weight: FontWeight.w600,
-                color: Colors.black,
-                textData: 'Acceder aux messages de ce case')
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isFavorite) ...[
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
               FloatingActionButton.small(
-                heroTag: 'favorite',
+                heroTag: 'messages',
                 backgroundColor: const Color.fromARGB(175, 255, 239, 8),
                 elevation: 3,
-                onPressed: () async {
-                  DBservice dbINSTANCE = DBservice();
-                  await dbINSTANCE.removeFromFavorite(
-                      userEMAIL: userEMAIL, caseID: widget.id);
-                  setState(() {
-                    isFavorite = false;
-                  });
-                },
-                child: const Icon(Icons.favorite),
+                onPressed: () {},
+                child: const Icon(Icons.message),
               ),
               const SizedBox(width: 10),
               widget.globals.textWithRainbowPolice(
@@ -274,56 +274,91 @@ class _HomeCaseState extends State<HomeCase> {
                   size: 15,
                   weight: FontWeight.w600,
                   color: Colors.black,
-                  textData: 'Retirer de vos cases enregistrés')
-            ] else ...[
-              FloatingActionButton.small(
-                heroTag: 'favorite',
-                backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-                elevation: 3,
-                onPressed: () async {
-                  DBservice dbINSTANCE = DBservice();
-                  await dbINSTANCE.addToFavorite(
-                      userEMAIL: userEMAIL, caseID: widget.id);
-                  setState(() {
-                    isFavorite = true;
-                  });
-                },
-                child: const Icon(Icons.favorite_border),
-              ),
-              const SizedBox(width: 10),
-              widget.globals.textWithRainbowPolice(
-                  align: TextAlign.end,
-                  size: 15,
-                  weight: FontWeight.w600,
-                  color: Colors.black,
-                  textData: 'Ajouter à vos cases enregistrés')
+                  textData: 'Acceder aux messages de ce case')
             ],
-            if (userOwnerCase == userEMAIL) ...[
-              FloatingActionButton.small(
-                heroTag: 'close',
-                backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-                elevation: 3,
-                onPressed: () async {
-                  DBservice dbINSTANCE = DBservice();
-                  await dbINSTANCE.addToFavorite(
-                      userEMAIL: userEMAIL, caseID: widget.id);
-                  setState(() {
-                    isFavorite = true;
-                  });
-                },
-                child: const Icon(Icons.check_box),
-              ),
-              const SizedBox(width: 10),
-              widget.globals.textWithRainbowPolice(
-                  align: TextAlign.end,
-                  size: 15,
-                  weight: FontWeight.w600,
-                  color: Colors.black,
-                  textData: 'Cloturer le case')
-            ]
-          ],
-        )
-      ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              if (isFavorite) ...[
+                FloatingActionButton.small(
+                  heroTag: 'favorite',
+                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                  elevation: 3,
+                  onPressed: () async {
+                    DBservice dbINSTANCE = DBservice();
+                    await dbINSTANCE.removeFromFavorite(
+                        userEMAIL: userEMAIL, caseID: widget.id);
+                    setState(() {
+                      isFavorite = false;
+                    });
+                  },
+                  child: const Icon(Icons.favorite),
+                ),
+                const SizedBox(width: 10),
+                widget.globals.textWithRainbowPolice(
+                    align: TextAlign.end,
+                    size: 15,
+                    weight: FontWeight.w600,
+                    color: Colors.black,
+                    textData: 'Retirer de vos cases enregistrés')
+              ] else ...[
+                FloatingActionButton.small(
+                  heroTag: 'favorite',
+                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                  elevation: 3,
+                  onPressed: () async {
+                    DBservice dbINSTANCE = DBservice();
+                    await dbINSTANCE.addToFavorite(
+                        userEMAIL: userEMAIL, caseID: widget.id);
+                    setState(() {
+                      isFavorite = true;
+                    });
+                  },
+                  child: const Icon(Icons.favorite_border),
+                ),
+                const SizedBox(width: 10),
+                widget.globals.textWithRainbowPolice(
+                    align: TextAlign.end,
+                    size: 15,
+                    weight: FontWeight.w600,
+                    color: Colors.black,
+                    textData: 'Ajouter à vos cases enregistrés')
+              ],
+            ],
+          ),
+          if (userOwnerCase == userEMAIL) ...[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                FloatingActionButton.small(
+                  heroTag: 'close',
+                  backgroundColor: const Color.fromARGB(175, 255, 239, 8),
+                  elevation: 3,
+                  onPressed: () async {
+                    DBservice dbINSTANCE = DBservice();
+                    await dbINSTANCE.addToFavorite(
+                        userEMAIL: userEMAIL, caseID: widget.id);
+                    setState(() {
+                      isFavorite = true;
+                    });
+                  },
+                  child: const Icon(Icons.check_box),
+                ),
+                const SizedBox(width: 10),
+                widget.globals.textWithRainbowPolice(
+                    align: TextAlign.end,
+                    size: 15,
+                    weight: FontWeight.w600,
+                    color: Colors.black,
+                    textData: 'Cloturer le case')
+              ],
+            ),
+          ]
+        ],
+      ),
     );
   }
 
@@ -344,8 +379,8 @@ class _HomeCaseState extends State<HomeCase> {
   photoWidget({required infosCases}) {
     if (infosCases.data!['photos'] != null) {
       return SizedBox(
-        height: 300,
-        width: 300,
+        height: 340,
+        width: 340,
         child: PhotoView(
           imageProvider: NetworkImage(infosCases.data!['photos']),
           minScale: PhotoViewComputedScale.contained * 1,

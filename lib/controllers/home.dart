@@ -4,6 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nouga/controllers/followed_cases.dart';
 import 'package:nouga/controllers/home_case.dart';
 import 'package:nouga/controllers/search.dart';
+import 'package:nouga/controllers/settings_page.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -278,7 +279,10 @@ class _HomeState extends State<Home> {
           child: FloatingActionButton(
             heroTag: 'settings',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
+            },
             child: const Icon(Icons.settings),
           ),
         ),
