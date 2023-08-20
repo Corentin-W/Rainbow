@@ -68,7 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             FirebaseFirestore.instance
                                 .collection('users')
                                 .doc(userEMAIL);
-                        db.delete().then((value) => Navigator.pop(context));
+                        db.delete().then((value) => widget.globals.signOut());
                       }
                     },
                     child: const Text('OK'),
