@@ -32,6 +32,12 @@ class Globals {
     }
   }
 
+  deleteUser(email, context) {
+    DocumentReference<Map<String, dynamic>> db =
+        FirebaseFirestore.instance.collection('users').doc(email);
+    db.delete().then((value) => Navigator.pop(context));
+  }
+
   textWithRainbowPolice(
       {required textData,
       required size,
