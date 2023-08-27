@@ -59,6 +59,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    print('ici');
     if (FirebaseAuth.instance.currentUser == null) {
       AuthService instanceSignOut = AuthService();
       instanceSignOut.signOut();
