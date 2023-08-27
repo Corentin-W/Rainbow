@@ -59,14 +59,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    print('ici');
-    if (FirebaseAuth.instance.currentUser == null) {
-      AuthService instanceSignOut = AuthService();
-      instanceSignOut.signOut();
-    }
+    // if (FirebaseAuth.instance.currentUser == null) {
+    //   AuthService instanceSignOut = AuthService();
+    //   instanceSignOut.signOut();
+    // }
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User?> snapshot) {
+          print('connecte???');
+          print(snapshot.data);
           if (snapshot.hasData) {
             return const Boarding();
           } else {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nouga/controllers/followed_cases.dart';
 import 'package:nouga/controllers/home_case.dart';
+import 'package:nouga/controllers/login.dart';
 import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/settings_page.dart';
 import 'package:nouga/controllers/warning.dart';
@@ -208,8 +209,45 @@ class _HomeState extends State<Home> {
             heroTag: 'add',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Warning()));
+              if (userEMAIL == '') {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Pas de compte'),
+                        content:
+                            const Text("Vous n'êtes connecté à aucun compte"),
+                        actions: [
+                          ListBody(
+                            children: [
+                              TextButton(
+                                child: const Text('Annuler'),
+                                onPressed: () {
+                                  return Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          ),
+                          ListBody(
+                            children: [
+                              TextButton(
+                                child: const Text('Se connecter'),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Login()));
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      );
+                    });
+              } else {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Warning()));
+              }
             },
             child: const Icon(
               Icons.add,
@@ -255,11 +293,48 @@ class _HomeState extends State<Home> {
             heroTag: 'favorite',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          FollowedCases(userEmail: userEMAIL)));
+              if (userEMAIL == '') {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Pas de compte'),
+                        content:
+                            const Text("Vous n'êtes connecté à aucun compte"),
+                        actions: [
+                          ListBody(
+                            children: [
+                              TextButton(
+                                child: const Text('Annuler'),
+                                onPressed: () {
+                                  return Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          ),
+                          ListBody(
+                            children: [
+                              TextButton(
+                                child: const Text('Se connecter'),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Login()));
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      );
+                    });
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FollowedCases(userEmail: userEMAIL)));
+              }
             },
             child: const Icon(Icons.favorite),
           ),

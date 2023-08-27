@@ -3,7 +3,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
-
   Future<User?> getUser() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     return auth.currentUser;
@@ -11,19 +10,22 @@ class AuthService {
 
   // Google Sign in
   signInWithGoogle() async {
-    // begin sign in process
+    print('zalu');
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-
-    // obtain auth detail from request
+    print('zeparation');
     final GoogleSignInAuthentication? gAuth = await gUser?.authentication;
-
+    print(gUser);
+    print(gAuth);
     // create new credential for user
     final credential = GoogleAuthProvider.credential(
         accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
 
     String? email = gUser?.email;
+    print('mail');
+    print(email);
     FirebaseFirestore db = FirebaseFirestore.instance;
     final docRef = db.collection('users').doc(email).get();
+    print('je vais creer luser');
     docRef.then((DocumentSnapshot doc) {
       if (doc.data() == null) {
         db
