@@ -125,6 +125,7 @@ class _HomeCaseState extends State<HomeCase> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               widget.globals.textWithRainbowPolice(
+                  // ignore: prefer_interpolation_to_compose_strings
                   textData: '${'Age :  ' + infosCases.data!['age']} ans',
                   align: TextAlign.start,
                   size: 18,
@@ -136,6 +137,7 @@ class _HomeCaseState extends State<HomeCase> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               widget.globals.textWithRainbowPolice(
+                  // ignore: prefer_interpolation_to_compose_strings
                   textData: 'Cheveux :  ' + infosCases.data!['cheveux'],
                   align: TextAlign.start,
                   size: 18,
@@ -145,7 +147,8 @@ class _HomeCaseState extends State<HomeCase> {
           Row(
             children: [
               widget.globals.textWithRainbowPolice(
-                  textData: '${'Taille :  ' + infosCases.data!['taille']} cm',
+                  // ignore: prefer_interpolation_to_compose_strings
+                  textData: 'Taille :  ' + infosCases.data!['taille'],
                   align: TextAlign.start,
                   size: 18,
                   weight: FontWeight.w600)
@@ -156,6 +159,7 @@ class _HomeCaseState extends State<HomeCase> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               widget.globals.textWithRainbowPolice(
+                  // ignore: prefer_interpolation_to_compose_strings
                   textData: 'Vetements :  ' +
                       infosCases.data!['description_vetements'],
                   align: TextAlign.start,
@@ -216,8 +220,10 @@ class _HomeCaseState extends State<HomeCase> {
                               caseID: widget.id, fileNameUrl: isUploaded);
                         }
                         setState(() {});
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       } else {
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       }
                     },
@@ -255,26 +261,6 @@ class _HomeCaseState extends State<HomeCase> {
                       textData: 'Supprimer la photo')
                 ],
               ],
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              FloatingActionButton.small(
-                heroTag: 'messages',
-                backgroundColor: const Color.fromARGB(175, 255, 239, 8),
-                elevation: 3,
-                onPressed: () {},
-                child: const Icon(Icons.message),
-              ),
-              const SizedBox(width: 10),
-              widget.globals.textWithRainbowPolice(
-                  align: TextAlign.end,
-                  size: 15,
-                  weight: FontWeight.w600,
-                  color: Colors.black,
-                  textData: 'Acceder aux messages de ce case')
             ],
           ),
           Row(
@@ -338,12 +324,7 @@ class _HomeCaseState extends State<HomeCase> {
                   backgroundColor: const Color.fromARGB(175, 255, 239, 8),
                   elevation: 3,
                   onPressed: () async {
-                    DBservice dbINSTANCE = DBservice();
-                    await dbINSTANCE.addToFavorite(
-                        userEMAIL: userEMAIL, caseID: widget.id);
-                    setState(() {
-                      isFavorite = true;
-                    });
+                    print('object');
                   },
                   child: const Icon(Icons.check_box),
                 ),
@@ -369,6 +350,7 @@ class _HomeCaseState extends State<HomeCase> {
     int hours = difference.inHours % 24;
     final localisation = infosCases.data!['localisation'];
     return widget.globals.textWithRainbowPolice(
+        // ignore: prefer_interpolation_to_compose_strings
         textData: 'Disparition depuis $days jour(s) et $hours heure(s), a ' +
             localisation,
         align: TextAlign.center,

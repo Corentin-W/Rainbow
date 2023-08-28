@@ -47,7 +47,10 @@ class _FollowedCasesState extends State<FollowedCases> {
     FirebaseFirestore db = FirebaseFirestore.instance;
     DocumentSnapshot<Map<String, dynamic>> querySnapshot =
         await db.collection('favorites').doc(userEMAIL).get();
+        if(querySnapshot.exists){
     favList = querySnapshot.data()?.values.toList() ?? [];
+
+        }
     return favList;
   }
 
@@ -92,13 +95,11 @@ class _FollowedCasesState extends State<FollowedCases> {
       stream: globals.getAllInfosFromCase(caseID: caseID),
       builder: (context, snapshot) {
         if (snapshot.data == null) {
-          return Text('NO DATAS');
+          return const Text('NO DATAS');
         }
         DateTime date = snapshot.data?['date'].toDate();
         Duration difference = DateTime.now().difference(date);
         int days = difference.inDays;
-        int hours = difference.inHours % 24;
-        int minutes = difference.inMinutes % 60;
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -119,7 +120,7 @@ class _FollowedCasesState extends State<FollowedCases> {
               children: <Widget>[
                 // Add padding around the row widget
                 Padding(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -157,7 +158,7 @@ class _FollowedCasesState extends State<FollowedCases> {
                                 weight: FontWeight.w600,
                                 color: Colors.black,
                                 textData:
-                                    '${'Disparition : Il y a ' + days.toString()} jour(s)'),
+                                    '${'Disparition : Il y a $days'} jour(s)'),
                             // Add some spacing between the subtitle and the text
                             Container(height: 10),
                             // Add a text widget to display some text

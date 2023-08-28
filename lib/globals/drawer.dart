@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/contact.dart';
-import '../controllers/followed_cases.dart';
 import '../controllers/home.dart';
 import '../controllers/informations.dart';
-import '../controllers/warning.dart';
 
 class DrawerGlobal extends StatefulWidget {
   const DrawerGlobal({super.key, required BuildContext contextFrom});
@@ -45,19 +43,6 @@ class _DrawerGlobalState extends State<DrawerGlobal> {
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Home()));
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.favorite_border,
-            ),
-            title: const Text('Cases suivis'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          FollowedCases(userEmail: userEMAIL)));
             },
           ),
           ListTile(

@@ -5,7 +5,6 @@ import '../services/auth_service.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -28,7 +27,6 @@ class _LoginState extends State<Login> {
   loginColumnWidgets(
       {required double screenWidth, required double screenHeight}) {
     Globals globalInstance = Globals();
-    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -41,7 +39,6 @@ class _LoginState extends State<Login> {
           // Inputs de login
           // loginFacebook(),
           loginGoogle(),
-          if (isIOS) ...[loginApple()],
           noAccount()
         ],
       ),
@@ -73,33 +70,11 @@ class _LoginState extends State<Login> {
     return null;
   }
 
-  loginApple() {
-    return SizedBox(
-      width: 230,
-      child: SignInWithAppleButton(
-        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-        onPressed: () async {
-          final credential = await SignInWithApple.getAppleIDCredential(
-            scopes: [
-              AppleIDAuthorizationScopes.email,
-              AppleIDAuthorizationScopes.fullName,
-            ],
-          );
-
-          print(credential);
-
-          // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-          // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-        },
-      ),
-    );
-  }
 
   loginGoogle() {
     return SignInButton(
       Buttons.Google,
       onPressed: () {
-        print('lessgooo');
         AuthService().signInWithGoogle();
       },
     );

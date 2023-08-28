@@ -145,6 +145,7 @@ class _PicturesCaseState extends State<PicturesCase> {
                                                               urlSnapshot.data!,
                                                           caseID:
                                                               widget.caseID);
+                                                  // ignore: use_build_context_synchronously
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(

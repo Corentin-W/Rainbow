@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 class Storage {
   getPicturesFromCase({required caseID}) async {
     final storageRef =
+        // ignore: prefer_interpolation_to_compose_strings
         FirebaseStorage.instance.ref().child("${"cases/" + caseID}/pictures/");
     final listResult = await storageRef.listAll();
     List returnList = [];

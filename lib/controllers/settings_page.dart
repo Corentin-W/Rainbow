@@ -44,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
   deleteProfil() {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: Color.fromARGB(255, 93, 162, 219), elevation: 2),
+            backgroundColor: const Color.fromARGB(255, 93, 162, 219), elevation: 2),
         onPressed: () async {
           showDialog(
             context: context,

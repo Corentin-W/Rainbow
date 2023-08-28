@@ -148,6 +148,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               globals.textWithRainbowPolice(
+                                  // ignore: prefer_interpolation_to_compose_strings
                                   textData: 'Vu(e) pour la derniere fois a ' +
                                       doc.data()['localisation'],
                                   align: TextAlign.left,

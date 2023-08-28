@@ -10,22 +10,13 @@ class AuthService {
 
   // Google Sign in
   signInWithGoogle() async {
-    print('zalu');
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-    print('zeparation');
     final GoogleSignInAuthentication? gAuth = await gUser?.authentication;
-    print(gUser);
-    print(gAuth);
-    // create new credential for user
     final credential = GoogleAuthProvider.credential(
         accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
-
     String? email = gUser?.email;
-    print('mail');
-    print(email);
     FirebaseFirestore db = FirebaseFirestore.instance;
     final docRef = db.collection('users').doc(email).get();
-    print('je vais creer luser');
     docRef.then((DocumentSnapshot doc) {
       if (doc.data() == null) {
         db
