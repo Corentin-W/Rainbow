@@ -11,6 +11,8 @@ import 'package:nouga/globals/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../globals/drawer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive/hive.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
