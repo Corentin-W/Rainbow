@@ -8,11 +8,11 @@ import 'package:nouga/controllers/search.dart';
 import 'package:nouga/controllers/settings_page.dart';
 import 'package:nouga/controllers/warning.dart';
 import 'package:nouga/globals/globals.dart';
+import 'package:nouga/models/person.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../globals/drawer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -40,6 +40,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     Globals globals = Globals();
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    testStorage();
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -114,7 +117,8 @@ class _HomeState extends State<Home> {
                 if (doc.data()['photos'] != null) {
                   pathImage = doc.data()['photos'];
                 } else {
-                  pathImage = dotenv.env['DEFAULT_PATH_IMAGE']!;
+                  pathImage =
+                      'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80';
                 }
                 return Card(
                   elevation: 5,
@@ -358,8 +362,11 @@ class _HomeState extends State<Home> {
             heroTag: 'settings',
             backgroundColor: const Color.fromARGB(175, 255, 239, 8),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()));
+              var box = Hive.box('testbox');
+              var boxResult = box.get(1);
+              print(boxResult);
+              /*  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsPage())); */
             },
             child: const Icon(Icons.settings),
           ),
@@ -368,5 +375,21 @@ class _HomeState extends State<Home> {
         const Text('Parametres')
       ],
     );
+  }
+
+  void testStorage() async {
+    var myBox = Hive.box('testbox');
+    myBox.put(1, 'okéééé');
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db
+        .collection('cases')
+        .where('user_email', isEqualTo: 'rainbapp@gmail.com')
+        .get()
+        .then((iterate) {
+      print('boucle');
+      for (var docUnique in iterate.docs) {
+        print(docUnique.data());
+      }
+    });
   }
 }

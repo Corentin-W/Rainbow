@@ -1,20 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hive/hive.dart';
+import 'package:nouga/models/person.dart';
 import 'package:nouga/services/auth_service.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'controllers/boarding.dart';
 import 'controllers/login.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nouga/boxes.dart';
 
 void main() async {
-  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
+  await Firebase.initializeApp();
   AuthService authService = AuthService();
   User? user = await authService.getUser();
 
@@ -22,6 +25,11 @@ void main() async {
   prefs.setString('userId', user?.uid ?? '');
   prefs.setString('userEmail', user?.email ?? '');
 
+  await Hive.initFlutter();
+  Hive.registerAdapter(PersonAdapter());
+  var openBox = await Hive.openBox<Person>('personBox');
+  var myOpenBox = await Hive.openBox('testbox');
+  
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
 }

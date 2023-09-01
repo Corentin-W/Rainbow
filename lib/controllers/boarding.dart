@@ -27,7 +27,7 @@ class _BoardingState extends State<Boarding> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     UserService userService = UserService();
-    String? googleApikey = dotenv.env['APIKEY_GOOGLEPLACES'];
+    String? googleApikey = '12344';
     GoogleMapController? mapController; //contrller for Google map
     // CameraPosition? cameraPosition;
     // LatLng startLocation = LatLng(27.6602292, 85.308027);
@@ -47,12 +47,7 @@ class _BoardingState extends State<Boarding> {
                 return const Home();
               }
             } else {
-              return  Center(
-                child: LoadingAnimationWidget.inkDrop(
-                color: Colors.black,
-                size: 200,
-              ),
-              );
+              return const Home();
             }
           }),
     );
@@ -141,8 +136,7 @@ class _BoardingState extends State<Boarding> {
                   strictbounds: false,
                   components: [Component(Component.country, 'fr')],
                   //google_map_webservice package
-                  onError: (err) {
-                  });
+                  onError: (err) {});
 
               if (place != null) {
                 setState(() {
